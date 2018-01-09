@@ -1,0 +1,39 @@
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/index/thumbnails/photo1.jpg" class="progressive replace">
+    <img src="./images/index/preview/photo1.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='photo1LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('photo1','photo1LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='photo1CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('photo1','photo1CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('photo1CommentAlert').innerHTML='Comments Loading...'; document.getElementById('photo1CommentImage').src='./loader.gif'; document.getElementById('photo1CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('photo1','photo1LikeCount'); getCommentCount('photo1','photo1CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='photo1CommentBox' class='commentBox'> 
+    <div id='photo1CommentHeader' class="commentHeader">
+      <div id='photo1CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='photo1CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='photo1CommentLoader'>
+    </div>
+  </div>
+
+  <div id='photo1Name' style="display: none;">TITLE_REPLACE</div>
+  <div id='photo1CameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='photo1Description' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->

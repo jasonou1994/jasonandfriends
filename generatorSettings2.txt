@@ -1,0 +1,227 @@
+JAVA PAGEGENERATOR SETTINGS FILE
+
+###
+pageTitle=Featured
+imageFolderName=index
+blackColor=color: #000000;
+%%%
+pelican_bw;Nikon 70-300mm at f/9 270mm on Nikon D7100;Taken with a shutter speed of 1/1000, a lucky shot of a Brown Galápagos Pelican taking off. These birds are found on coastal regions throughout the islands. They're much bigger than you'd think with a wingspan of 8 feet.;Galápagos Pelican 
+%%%
+flamingos;Nikon 18-105mm f/3.5-5.6 at f/6.3 105mm on Nikon D90;Flamingos! Taken at Jurong Bird Park in Singapore during my visit in January, 2017. It was not winter at all. Probably my favorite photo of all time...I love how the flamingos are all in a nice line.;Jurong Flamingos
+grass;Nikon 18-105mm f/3.5-5.6 at f/6.3 105mm on Nikon D90;I still have no idea what this is of to this day--taken somewhere in Yellowstone National Park. It's definitely not actually grass. I think its moss or algae of some sort. I love the crisp clarity near the center that smoothly fades away.;Grass
+warbler_bw;Nikon 70-300mm at f/10 300mm on Nikon D7100;The first critter I saw after leaving the airport! Darwin's study of these little guy's founded the core of his argument for adaptive radiation and evolution as a whole;Darwin's Finch
+iguana_bw;Nikon 70-300mm at f/10 210mm on Nikon D7100;Taken at Las Tintoreras. This little island was home to more than 3000 of these endemic marine iguanas. It was hard not to step on them. This one is absorbing warmth from a lava rock;Iguana Monochrome
+iguana_cuddling;Nikon 70-300mm at f/8 210mm on Nikon D7100;Marine iguanas have no concept of family or relationships. They're only cuddling up for warmth;Iguana Family
+bluefoot_square;Nikon 70-300mm at f/9 140mm on Nikon D7100;The blue-footed booby is a marine bird native to subtropical and tropical regions of the eastern Pacific Ocean, such as the Galápagos Islands. We arrived just in time to watch them perform their famous mating "dance";Blue-Footed Booby
+sunrise1;Nikon 18-105mm f/3.5-5 at f/8 45mm on Nikon D90;Taken in Huang Shan. We arrived the day before and had spent the night--I was disappointed that there were no clouds in the sky, which is this mountain is famous for. But, getting this photo partially made up for it! We woke up at 5am, to hike to the peak by 5:30am, where we then shivered and fought other tourists for the best spots until the actual sunrise at 6:30am. Worth! (part 1);Huangshan Sunrise
+bluebutterfly;Nikon 105mm Macro f2.8 at f/22 on Nikon D7100;This photo was manually stitched together using photoshop from 42 shots at a 1:1 magnification ratio with my trusty Nikon 105mm macro lens. I bought the butterfly (it's mounted in glass: I put a black tshirt to make the background!) from a cool shop in New York's Chinatown. It's got flaws but I'm very happy with it! The full image file is more than 200mb.;Morpho Menelaus
+sensoji;Nikon 18-105mm f/3.5-5.6 at f/6.3 105mm on Nikon D90;I've been here before...this time I ditched my friends and brought a nice camera! Taken at Senso-ji temple in Tokyo. Lots of souvenirs to buy.;Sensō-ji
+blackriver;Nikon 18-105mm f/3.5-5.6 at f/16 52mm on Nikon D90;Taken at Yellowstone National Park. The edit feels martian to me.;Mars
+skypark;Nikon 18-200mm f/3.5-5.6 at f/6.3 95mm on Nikon D90;Who knew Flushing had shots like this! Taken on a day with a spectacularly colorful sunset. Captured a cute couple admiring the view.;The Skywalk
+hermitage;Nikon 18-105mm f/3.5-5.6 at f/6.3 22mm on Nikon D90;My favorite architectural style is Rococo, so I was happy to find out that there was a museum in St. Petersburg, called the Hermitage, with hundreds of beautifully ornate rooms.;The Hermitage
+drowning;Nikon 18-105mm f/3.5-5.6 at f/5.6 48mm on Nikon D90;I edited this photo of Koi fish taken in Su Zhou to appear as if the fish are drowning...while in the water;Drowning
+airplane;Nikon 18-105mm f/3.5-5.6 at f/20 25mm on Nikon D90;We hiked 5 miles to see this plane! Mostly worth it, besides for the annoying tourists who actually climbed up on top. It really was amazing seeing a plane decompose like that. Taken near Reynisdrangar, Iceland;Mayday
+tammyinairplane;Nikon 18-105mm f/3.5-5.6 at f/14 26mm on Nikon D90;Taken inside the famous downed commercial jet near Reynisdrangar, Iceland;Swirly
+mars;Nikon 18-105mm f/3.5-5.6 at f/14 105mm on Nikon D90;Taken on the way back from the downed commercial jet near Reynisdrangar, Iceland. Colors are unedited. It felt like walking on Mars.;Alien
+stairwaytoheaven;Nikon 18-105mm f/3.5-5.6 at f/16 52mm on Nikon D90;One of the famous temples in Hangzhou had an elevator to get to it! I thought it was ridiculous but it made for some cool shots. This is a close up of the temple exterior, but it looks...frightening to me--almost like a furnace or a many-eyed devil.;Stairway to Hell
+splash;Nikon 70-300mm f/4.5-5.6 at f/5.6 300mm on Nikon D7100;Shot of a fountain near my house at 1/8000 shutter speed to freeze the water.;Splash
+icecream;Sigma 10-20mm f/3.5 at f/13 12mm on Nikon D90;Taken at White Pocket in Utah! (Arizona?) We were driven there in an hour long drive by a lovely tour lady and her floofer, Nina;Icecream
+trinidad;Nikon 18-105mm f/3.5-5.6 at f/6.3 105mm on Nikon D90;I have to say I wasn't impressed by most of Cuba...particularly the lack of food. Still, it was nice taking a break from technology and slowing down for a little, and enjoying the home-made breakfasts by our hosts every morning! Taken in Trinidad;Trinidad Sunset
+fuerza;Apple iPhone 5;Taken way back in freshman year during an interactive show called Fuerza Bruta. Its actually a plastic tarp that was drawn over the entire audience, with water poured in, and artists crawling on top of us.;Bruta
+bacteria;Nikon 18-105mm f/3.5-5.6 at f/5.3 75mm on Nikon D90;Another Yellowstone close-up. I think this is bacteria? Mold?;Blue and Green Bacteria
+dashboard;Nikon 18-105mm f/3.5-5.6 at f/11 34mm on Nikon D90;Taken in the back of a rickety taxi going from Havana to Cuba. Really lucky to have made it in one piece in that ancient clunker.;Santi Spiritus
+fruitvendor;Nikon 50mm f/1.8 at f/1.8;A fruit vendor! Love the background blur. Taken in New York near Chinatown.;Fruit Vendor
+tammyoverocean;Nikon 18-105mm f/3.5-5.6 at f/16 18mm on Nikon D90;Taken at the end of the world. The slenderman-looking figure is actually Tammy smiling. The atmosphere was crazy that day. These colors aren't touched at all. Taken on Snaefellsness Peninsula in Iceland;The End of the World
+geysertourists;Nikon 18-105mm f/3.5-5.6 at f/13 70mm on Nikon D90;Taken at Geysír, the OG inspiration for geysers worldwide. Unfortunately, its actually nowhere near as impressive as those in Yellowstone--I figured the tourists would make a far more interesting shot. Taken while driving the Golden Ring Road in Iceland.;Paparazzi
+bubble;Nikon 105mm Macro f2.8 at f/3.2 on Nikon D90;Bad Tam-pon!;Bubbles
+eye;Nikon 105mm Macro f2.8 at f/3.8 on Nikon D90;My eye...thanks Tammy;Eye of the Tiger
+smug;Nikon 18-105mm f/3.5-5.6 at f/16 18mm on Nikon D90;And who do you think you are? Taken in the Kremlin Museums, Moscow;Elites
+chicks;Nikon 18-105mm f/3.5-5.6 at f/7.1 70mm on Nikon D90;Taken at Jurong Bird Park. Notice the lucky red envelope to symbolize the Chinese New Year! New year, new life.;Chicks
+wildflowers;Sigma 10-20mm f/3.5 at f/5.6 20mm on Nikon D90;Taken at White Pocket, during the last week these flowers bloom;Wildflowers
+%%%
+geyser;Nikon 18-105mm f/3.5-5.6 at f/13 66mm on Nikon D90;Yellowstone is a wondrous place: it smells of rotten eggs and you can hear the scalding water boiling and rumbling under your feet. It's a primal place. This lucky photo was taken at Prismatic Lake. In fact, its what inspired me to get more into photography to start with!;Prismatic Lake
+nazca;Nikon 70-300mm at f/10 70mm on Nikon D7100;I love this shot of Nazca Boobies! Air, land, water, life, action.;Nazca Boobies
+beachhouse;Nikon 70-300mm at f/10 70mm on Nikon D7100;Taken during the afternoon golden hour for the awesome lighting. Isla Isabella, Galápagos;Beach House
+finch_flower;Nikon 70-300mm at f/10 250mm on Nikon D7100;A Darwin's Finch found on Isla Santa Cruz on the Galápagos Islands. Only a few species of Darwin's Finch are pollinators.;Pollinator 
+bee1;Nikon 105mm Macro f2.8 at f/29 on Nikon D90;This is a bee coked-out from slurping some disgusting green/brown sweet stuff. It was not behaving normally at all--it was shaking and twitching and was constantly rubbing its mouth with its arms for some reason. What I like about this photo is that its not just another macro photo of a bee pollinating some flower...of which I have a ton!;Apis Mellifera a la C17H21NO4
+kayaks;Nikon 50mm f/1.8 at f/1.8 on Nikon D90;Taken on Nantucket Island! This was one of my first experiences shooting a vacation without relying on my zoom lenses. I think it really forced me to think outside of the box...the inability to zoom forced me to really think about composition and break scenes down; if I had a zoom lens I would have tried to zoom out to capture the kayaks in their entirety, which honestly would have resulted in a very boring photo.;Tropical Skittles
+jellyfish;Nikon 18-105mm f/3.5-5 at f/4.5 28mm on Nikon D90; Wow. This was really one of my coolest earliest photos. At this point in time, I really didn't know how to use my camera yet. I'm pretty sure I shot this on P, set to 3200 ISO (which is way too high for a D90), but I just got lucky and got the perfect depth of field for this photo. I'll admit I used a filter though :) Taken in the Osaka Aquarium;Jellyfish
+concretejungle;Nikon 105mm Macro f2.8 at f/10 on Nikon D90;Welcome to the melting pot, corners where we selling rock - Afrika Bambaataa shit, home of the hip-hop - Yellow cab, gypsy cab, dollar cab, holla back - For foreigners it ain't fair they act like they forgot how to add;Concrete Jungle
+dizengoff;Nikon 70-300mm f/4.5-5.6 at f/4.5 110mm on Nikon D7100;Israeli hummoose is best hummoose. Hummus -> Taco -> Uni -> Scallop -> Clam;Dizengoff
+softwave;Nikon 18-105mm f/3.5-5.6 at f/9 40mm on Nikon D90;One of these waves soaked my sneakers at Reynisdrangar Black Sand Beach 30 minutes from Vík, Iceland. I was pissed and did not get to explore the basalt structures that everyone else was oggling at. Still, I guess it was worth it to get the nice froth on this beach. Everything really was so bluetoned.;Soft Wave on Reynisdrangar;
+threehole;Nikon 18-105mm f/3.5-5.6 at f/20 75mm on Nikon D90;Jökulsárlón, literally "glacier lagoon," was misty and impeccable. Everything was shrouded in a fine mist, and the sun made everything feel frozen in time. This iceberg was more than 60m tall.;Jökulsárlón
+wires;Nikon 18-105mm f/3.5-5.6 at f/14 18mm on Nikon D90;I love this photo...It was taken at the crashed plane on Reynisdrangar beach near Vík. I really enjoyed seeing the plane...all desicated, with its innards spilling out.;Sólheimasandur
+oculus;Nikon 105mm Macro f2.8 at f/2.8 on Nikon D7100;I turned up the blacks to make the people silhouettes. I feel really proud looking at this photo. I think it really embodies what New York is all about. People move quickly and seem to not care about each other, but in the end we stand as one and nothing can push us down.;The Oculus
+thewave;Sigma 10-20mm f/3.5 at f/8 20mm on Nikon D90;The quintessential slot canyon photo, taken in Lower Antelope Canyon, near Page, Arizona. Yes...this is heavily edited for the pinks.;Tidal
+rosedroplet;Nikon 105mm Macro f2.8 at f/18 on Nikon D7100;Wet leaf taken on Nantucket island following a heavy storm;Citrus
+wildfire;Nikon 18-105mm f/3.5-5.6 at f/8 105mm on Nikon D90;I love this photo. I honestly think it's one of my best! It really captures the awe I felt...the smoke, the burnt down trees in the background, the sulfuric smell...Taken in Yellowstone National Park near Great Prismatic Lake;Wildfire
+sunrise2;Nikon 18-105mm f/3.5-5.6 at f/8 28mm on Nikon D90;Taken in Huang Shan. We arrived the day before and had spent the night--I was disappointed that there were no clouds in the sky, which is this mountain is famous for. But, getting this photo partially made up for it! We woke up at 5am, to hike to the peak by 5:30am, where we then shivered and fought other tourists for the best spots until the actual sunrise at 6:30am. Worth! (part 1);始信
+umbrellas;Nikon 18-105mm f/3.5-5.6 at f/7.1 80mm on Nikon D90;Taken during a rainy day in moody Kyoto.;Umbrellas
+bee2;Nikon 105mm Macro f2.8 at f/14 on Nikon D90;My first insect macro shot! I love the way the light falls on the bee and the flowers;Slurp
+ballet;Nikon 18-105mm f/3.5-5.6 at f/5.6 105mm on Nikon D90;What's going on here?! If you look closely its female dancers in the middle representing ocean life, surrounded by men holding nets. Taken during Ballet Folklórico de México;The Ballet
+chinatownexposure;Nikon 105mm Macro f2.8 at f/20 on Nikon D90;A fun long exposure shot of New York's Chinatown.;Crisscross
+audience;Nikon 18-105mm f/3.5-5.6 at f/5 48mm on Nikon D90;Taken during a performance of Ballet Folklórico de México;Sliver
+pinkpuddle;Nikon 18-200mm f/3.5-5.6 at f/5.6 135mm on Nikon D90;;Reflections
+lantern;Nikon 18-105mm f/3.5-5.6 at f/4 18mm on Nikon D90;Taken after sunset in Fushimi Inari-taisha, one of many shinto shrines found in Kyoto. Most people in the day time...but the night really brings out a somber mysterious mood. We walked back from the peak in silence with torii gates all around us.;Fushimi Inari-taisha
+rockybeach;Nikon 18-105mm f/3.5-5.6 at f/10 105mm on Nikon D90;Taken along the Great Ocean Road in Melbourne;Great Ocean Road
+horseshoe;Sigma 10-20mm f/3.5 at f/13 12mm on Nikon D90;Sunset shot into Horseshoe Bend, found near Page, Arizona. It was at least 100 degrees. We found respite in the sun until sunset!;Horseshoe Bend
+thebathroom;Nikon 18-105mm f/3.5-5.6 at f/3.8 22mm on Nikon D90;This was actually....a random bathroom in the art exhibition center of a Moscow park;ванная
+lotus;Nikon 18-105mm f/3.5-5.6 at f/5.6 105mm on Nikon D90;Shot of lotus flowers in the moat of Hongcunzhen Village, where Flying Tiger, Hidden Dragon was shot, not far from Huang Shan.;宏村
+babboons;Nikon 18-105mm f/3.5-5.6 at f/7.1 92mm on Nikon D90;This is a pretty zoomed in shot. There were at least 50 babboons in this enclosure. It was...truly perspective changing seeing how human our distant cousins are.;Babboons
+horses;Nikon 18-105mm f/3.5-5.6 at f/10 58mm on Nikon D90;Wild Icelandic horses;Arabesque
+
+###
+pageTitle=Galápagos
+imageFolderName=galapagos
+blackColor=color: #000000;
+%%%
+pelican_bw;Nikon 70-300mm at f/9 270mm on Nikon D7100;Taken with a shutter speed of 1/1000, a lucky shot of a Brown Galápagos Pelican taking off. These birds are found on coastal regions throughout the islands. They're much bigger than you'd think with a wingspan of 8 feet.;Galápagos Pelican 
+%%%
+nazca;;;Nazca Booby
+iguana_cuddling;;;Cuddling Iguanas
+threeflamingos;;;Three Flamingos
+iguana_bw;;;BW Iguana
+lifeguard;;;Lifeguard
+bluefoot_square;;;Blue-footed Booby
+heron_snow;;;Heron
+sally_thin;;;Sally
+iguana_closeup;;;Iguana
+bluefoot2;;;Blue-footed Booby
+goldenhour;;;Golden Hour
+mirror;;;Mirror
+sally_hiding;;;Hiding Sally
+sally_couple;;;Couples
+iguana_mass;;;Mass Iguana
+heron_closeup;;;Heron Close-up
+%%%
+beachhouse;;;Beach House
+sally_moss;;;Sally Moss
+warbler_bw;;;BW Warbler
+finch_flower;;;Darwin's Finch
+tortoise;;;Tortoise
+cross;;;Holy Cross
+tortoise_skin;;;Tortoise Skin Close-Up
+pear2;;;Prickly Pear Cactii
+sally_wave;;;Sally's Wave
+iguana;;;Bathing Iguana;
+pear1;;;Prickly Pear Cactii
+sealion;;;Sea Lion
+pelican_feathering;;;Pelican Feathers
+penguin;;;Tropical Penguin
+pelican_fishmarket;;;Pelican at the Fishmarket
+iguana_couple;;;Iguana Couple
+kingfisher_bw;;;Kingfisher
+moobs;;;Moobs
+
+###
+pageTitle=Iceland
+imageFolderName=iceland
+blackColor=color: #000000;
+%%%
+geysirtourists;Nikon 18-105mm f/3.5-5.6 at f/13 70mm on Nikon D90;Taken at Geysír, the OG inspiration for geysers worldwide. Unfortunately, its actually nowhere near as impressive as those in Yellowstone--I figured the tourists would make a far more interesting shot. Taken while driving the Golden Ring Road in Iceland.;Paparazzi
+%%%
+planewires;;;Wires
+planeprofile;;;Downed
+planetammy;;;Tammy
+planejourney;;;Journey
+sunshineturd;;;Turd
+sunshinepyramid;;;Pyramids
+sunshinecrampon;;;Crampon
+sunshinefootprint1;;;Footprint
+sunshinefootprint2;;;Footprint
+sunshinecanal;;;Canal
+sunshineicepick;;;Icepick
+%%%
+horses1;;;Icelandic Horses
+horses2;;;Icelandic Horses
+blackbeachsoftwave1;;;Soft Wave
+blackbeachmilk;;;Milk
+mountainhike;;;Above the Baths
+blackbeachwaves;;;Black Sand
+lagoonboats;;;Boats
+lagoonkunal;;;Lagoon
+lagoon3;;;Iceburgs
+snaefellsoverlook;;;Snaefells
+sunshinelarge1;;;Sunshine Glacier
+sunshinelarge2;;;Sunshine Glacier
+lavafields1;;;Lavafields
+
+
+###
+pageTitle=Yellowstone
+imageFolderName=yellowstone
+blackColor=color: #000000;
+%%%
+geyser1;Nikon 18-105mm f/3.5-5.6 at f/13 66mm on Nikon D90;Yellowstone is a wondrous place: it smells of rotten eggs and you can hear the scalding water boiling and rumbling under your feet. It's a primal place. This lucky photo was taken at Prismatic Lake. In fact, its what inspired me to get more into photography to start with!;Prismatic Lake
+%%%
+bacteria;;;Bacteria
+paintpots;;;Painter's Pots
+prismatic;;;Prismatic
+twosuns;;;Two Suns
+bison;;;Bison
+eaglediving;;;Diving Eagle
+enoki;;;Enoki
+waterfall;;;Waterfall
+geyser3;;;Geyser
+fire;;;Fire
+mars;;;Mars
+%%%
+river;;;Black River
+parents;;;Love
+fallenlogs;;;Wildfire
+stepmirrors;;;Step Mirror
+mirrors;;;Mirror
+tetons;;;Tetons
+bwmirrors;;;BW Prismatic
+grass;;;Grass
+geyser2;;;Geysers
+redclay;;;Red Clay
+
+###
+pageTitle=Glen Canyon
+imageFolderName=glencanyon
+blackColor=color: #000000;
+%%%
+horseshoe;Sigma 10-20mm f/3.5 at f/13 12mm on Nikon D90;Sunset shot into Horseshoe Bend, found near Page, Arizona. It was at least 100 degrees. We found respite in the shade until sunset!;Horseshoe Bend
+%%%
+ridge1;;;Antelope 1
+wave1;;;Antelope 2
+columns;;;Antelope 3
+sunovermountains;;;Sun-Over-the-Mountains
+sky;;;Antelope 4
+%%%
+icecream1;;;Ice Cream
+icecream2;;;Ice Cream 2
+wildflower;;;Wildflowers
+nina;;;Nina
+lines1;;;Lines 1
+lines2;;;Lines 2
+lizard;;;Lizard
+
+###
+pageTitle=Japan
+imageFolderName=japan
+blackColor=color: #000000;
+%%%
+smoke;Nikon 18-105mm f/3.5-5.6 at f/6.3 105mm on Nikon D90;I've been here before...this time I ditched my friends and brought a nice camera! Taken at Senso-ji temple in Tokyo. Lots of souvenirs to buy.;Sensō-ji
+%%%
+gold;;;Golden
+dolphin;;;Osaka Aquarium
+lanterns;;;Lanterns
+flowers;;;Flowers
+storefront;;;Fish Market
+wasabi;;;Wasabi
+garlic;;;Garlic
+fushimi;;;Fushimi Inari
+roof;;;Temple
+redballs;;;Roppongi
+%%%
+rain2;;;Umbrellas
+rain1;;;Rain
+jellyfish;;;Jellyfish
+savanna;;;Fall 1
+rainbow;;;Fall 2
+bamboo;;;Arashiyama
+cars;;;Cars
+falcon;;;Falconers
+deer;;;Nara Deer

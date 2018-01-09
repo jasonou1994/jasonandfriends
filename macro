@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html>
+<title>Macro</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="googleRaleway.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="progressive-image.css">
+<link rel="stylesheet" href="jasonandfriends.css">
+<script type='text/javascript' src='jasonandfriends.js'></script>
+<script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+<script type='text/javascript' src='progressive-image.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<head>
+  <link rel="icon" href="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-1/c0.14.320.320/p320x320/10544355_10207124754778174_2507783529110791968_n.jpg?oh=264e6e1ffdd7ba5c6d9d567c0b924965&oe=59783CC9">
+  <meta property="og:title" content="jasonandfriends" />
+  <meta property="og:url" content="http://www.jasonandfriends.net" />
+  <meta property="og:image" content="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-1/c0.14.320.320/p320x320/10544355_10207124754778174_2507783529110791968_n.jpg?oh=264e6e1ffdd7ba5c6d9d567c0b924965&oe=59783CC9" />
+  <meta property="og:description" content="I initially envisioned this site as just as a place to store and share my favorite travel photos, but as I got started I realized that it was a great opportunity to really challenge myself technically by building everything myself from scratch. 
+
+I'm proud to say that the entire site right now, from the front-end design to the servers and infrastructure that lie below, are nearly entirely the product of my own efforts (which is also why there's still bugs and uncompleted features everywhere). 
+
+it definitely wasnt an easy journey--Along the way I've had the opportunity to practice or get acquainted with so many different technologies, and there's still so much to do. There have been many moments in the past weeks where I've wanted to tear my hair out and just give up. But, I really think this is one of the best things I've ever done. I'm 100% certain now that I want to enter the tech industry at some point in my life, even though I couldn't get there straight out of college. 
+
+To all my friends (esp. Tammy) and family thank you so much for all the memories over the years!! I love you all so much. 
+
+Technologies used: 
+Google Cloud Compute Engine
+Apache HTTP Server
+Unix shell
+MYSQL
+PHP
+CSS
+HTML
+JavaScript
+Java
+Google Domains 
+
+Software used: 
+Ubuntu 14
+Mac OS
+Sublime Text
+Eclipse
+Sequel Pro" />
+
+
+</head>
+
+
+<body style="" onload="checkCookie(); getCartCount('shoppingCartText');getCartCount('cartActualCounter'); loadExpandItemProducts();">
+
+<!-- !PAGE CONTENT! -->
+<div id="background-overlay" class="background-overlay" style="" onclick="closeCart();document.getElementById('expandContainer').style.display='none'; document.getElementById('background-overlay').style.opacity='.00';">
+</div>
+
+<div id="cartContainer" class="cartContainer" style="height: 0; opacity: 0; max-height: 95%; overflow: scroll; ">
+
+	<div class="cartHeader" style="">
+	  <div class="cartHeaderTitle" id="cartHeaderTitle" style=""> Cart </div>
+	  <div class="cartHeaderIcons" style="" >
+	    <div class="cartHeaderIconsCount" id="cartActualCounter" style="">...</div>
+	    <img class="cartHeaderIconsShoppingCart" src="./shoppingCartBlack.png" >
+	    <img class="cartHeaderIconsClose" style="" src="./cross.png" onclick="closeCart();">
+	  </div>
+	</div>
+
+	<div class="cartMessageEmpty" id="cartMessageEmpty" style="">
+	  Looks like your cart is empty! <br> You can add some items in the shop.
+	</div>
+
+	<div class="cartMessageLoading" id="cartMessageLoading" style="">
+	  Loading... 
+	  <img class="cartMessageLoadingGif" src="./loader.gif" style="">
+	</div>
+
+  <div class='checkOutProgressBar' id = 'checkOutProgressBar' style="display: none;">
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarDelivery' style="border-width: 0 0 1px 1px;"> Delivery</div>
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarBilling' style="border-width: 0 0 1px 1px;"> Billing</div>
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarConfirmation' style="border-width: 0 1px 1px 1px;"> Confirm</div>
+  </div>
+
+  <div class="cartDeliveryBillingConfirmation" id="cartDeliveryBillingConfirmation" style="height: auto;">
+  </div>
+
+	<div class="cartContentsContainer" id="cartContentsContainer" style="">
+		<!--CART CONTENTS ADDED IN JAVASCRIPT ON CLICK VIA HEADER, SEE toggleCart()-->
+	</div>
+
+  <div class="cartPaymentConfirmation" id="cartPaymentConfirmation" style="height: auto; width: 100%; display: none;">
+    <div class='checkOutGroupHeading' id='cartPaymentConfirmationTitle2' style="width: 100%; display: block; float: left;">
+      Shipping Address
+      <div style="font-size: 14px;margin-top: -4px;"> (Shipping is free! Items will be delivered via FedEx in 1-2 weeks.)</div>
+      <div id=shippingAddressConfirmationBox style="display: block;float: left;margin-left: 5%; width: 90%;overflow: auto; font-size: 14px;">66 North Hillside Ave<br>Livingston, NJ
+      </div>
+    </div>
+
+    <div class='checkOutGroupHeading' id='cartPaymentConfirmationTitle' style="width: 100%; display: block; float: left;">
+      Payment Info
+    </div>
+    <div id=fakeCC style="width: 90%; padding-bottom: 50.25%; background-color: #f4f4f4; display: block; float: left;  border-radius: 6px; margin: 3% 5% 5% 5%; position: relative; border: 1px solid #888888;  ">
+      
+      <img id= fakeCCType src="" style="width: 20%; top: 30%; left: 7%; position: absolute;">
+      <div id = fakeCCNumber style="width: 90%; top: 50%; left: 7%; position: absolute; font-size: 22px; color: #383838;"></div>
+
+      <div id= fakeCCExpLabel style=" top: 66%; left: 7%; position: absolute; font-size: 13px;color: #383838;">Exp</div>
+      <div id=fakeCCExpText style="top: 64%; left: 15%; position: absolute; font-size: 16px;color: #383838;"></div>
+
+      <div id=fakeCCZipLabel style=" top: 66%; left: 40%; position: absolute; font-size: 13px;color: #383838;">Zip</div>
+      <div id=fakeCCZipText style="top: 64%; left: 47%; position: absolute; font-size: 16px;color: #383838;">07039</div>
+    </div>
+  </div>
+
+  <div id = "cartCreditCardForm" style="display: none; ">
+    <label style="color: #383838;">Card Number</label>
+    <div id="sq-card-number"></div>
+    <label style="color: #383838;">CVV</label>
+    <div id="sq-cvv"></div>
+    <label style="color: #383838;">Expiration Date</label>
+    <div id="sq-expiration-date"></div>
+    <label style="color: #383838;">Postal Code</label>
+    <div id="sq-postal-code"></div>
+    <!--
+      After the SqPaymentForm generates a card nonce, *this* form POSTs the generated
+      card nonce to your application's server.
+
+      You should replace the action attribute of the form with the path of
+      the URL you want to POST the nonce to (for example, "/process-card")
+    -->
+    <form id="nonce-form" novalidate action="REPLACE_ME" method="post">
+      <!--
+        Whenever a nonce is generated, it's assigned as the value of this hidden
+        input field.
+      -->
+      <input type="hidden" id="card-nonce" name="nonce">
+
+      <!--
+        Clicking this Submit button kicks off the process to generate a card nonce
+        from the buyer's card information.
+      -->
+    </form>
+  </div>
+
+
+
+	<div class="cartCheckOutContainer" id="cartCheckOutContainer" style="">
+	  <div id="cartCheckOutPrice" style="float: left; font-size: 20px; margin-top: 3px; color: #383838;">
+	  	...
+	  </div>
+	  <div class="cartCheckOut" id='cartCheckOut' onclick="checkOutDelivery();">Check Out</div>
+    <div class='cartBack' id = checkOutBackButton> Back</div>
+	</div>
+</div>
+
+<div id = "hiddenStorage" style="display: none;">
+	
+  <div id = "nonceStorage">
+  </div>
+</div>
+
+<!-- IMAGE EXPAND -->
+
+<div id= "expandContainer" currentImage="" style="position: fixed;  padding: 20px 10px 10px 10px; max-height: 100%; max-width: 100%; height: auto; width: auto; overflow-y:scroll; overflow-x: hidden; z-index: 10000; background-clip:content-box; display: none;">
+  <div  style="width: 100%; float: left; clear: both; border-radius: 10px 10px 0 0; background-color: rgb(250,250,250);">
+    <div id="expandPhotoTitle" style="font-size: 2em; float: left; margin-top: 30px; margin-bottom: 10px; margin-left: 5px; color: #383838;">
+      N/A
+    </div>
+    <div style="background-color: rgb(250,250,250);">
+      <img src="./cross.png" style="width: 25px; opacity: .9; float: right;cursor: pointer; margin: 5px 5px 0 0; " onclick="closeCart();document.getElementById('expandContainer').style.display='none'; document.getElementById('background-overlay').style.opacity='.00';">
+    </div>
+  </div>
+  <img id="expandFullSize" src = "" style="width: 100%;float: left; background-color: rgb(250,250,250);">
+ 
+  <div id="expandDescription" style="width: 100%;  font-size: 1em; float: left; background-color: rgb(250,250,250); padding-left: 5px; color: #888888;">
+    N/A
+  </div>
+  <div id="expandCameraInfo" style="width: 100%; font-size: 1em; float: left;  border-radius:0 0 10px 10px; background-color: rgb(250,250,250); padding-left: 5px; color: #888888; font-style: italic;">
+    N/A
+  </div>
+  <div id = "expandPrints" style="width: 100%; font-size: 1em; float: left;  border-radius:0 0 10px 10px; background-color: rgb(250,250,250); padding-left: 5px; color: #383838;">
+    <div id = "expandCameraBorderContainer" style="float:left; width: 100%; background-color: rgb(250,250,250);">
+        <div id = "expandCameraBorder" style="width: 98%; border: .5px solid rgb(220,220,220); margin-left: 1%;">
+        </div> 
+    </div>
+   
+    <div style="font-size: 1.2em; margin-bottom: 2px;">
+        Buy Prints
+    </div>
+    <div id = expandPrintsDescription style="width: 60%; float: left;">
+        <div class="productSubheading">Description:</div>
+        <div style="font-size: .8em; color: #888888;"> 
+            &bull;&nbsp;Printed on Epson Ultra Premium Luster Photo Paper<br>
+            &bull;&nbsp;10mm thick<br>
+            &bull;&nbsp;Slightly glossy<br>
+            &bull;&nbsp;Fingerprint resistant<br>
+        </div>
+        
+    </div>
+    <div id = expandPrintsAttributeQuantity style="width: 40%; float:left;">
+        <div id = 'expandPrintsAttribute' class="productSubheading" >Size:</div>
+        <div class="productSubheading">Quantity:</div>
+        <form>
+            <select id="expandPrintsQuantity" onchange="updateTempPrintProduct();">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+            </select>
+        </form>
+        
+    </div> 
+    <div id = expandPrintsPriceCheckOut style="float: left; width: 100%; margin-bottom: 10px; margin-top: 10px;">
+        <div style="width: 60%; float: left;">
+            <div style="float:left; font-size: 1.2em;">$</div>
+            <div id = expandPrintsPrice style="float: left; font-size: 1.2em;" >PRICE_PLACEHOLDER</div>
+        </div>
+        
+        <div style="width: 40%; float: left;">
+            <div id = expandPrintsAddToCart class='productAddToCart' style="height: 25px; background-color: rgb(218, 165, 32); color: rgb(56, 56, 56); float: left; width: 95%;">
+            Add to Cart
+            </div>
+        </div>
+    </div>
+    
+  </div>
+    
+</div>
+
+
+  <!--<div style="width: 100%;  border: 1px solid black; font-size: 1em; float: left;">
+    <div style="width: 50%;  border: 1px solid black; font-size: 1em; float: left;text-align: left;">
+      <div style="width: 100%; display: inline-block;">T SHIRTS</div>
+      <div style="width: 50%;  border: 1px solid black; font-size: 1em; display: inline-block;">
+      &bull;&nbsp;100% combed ring-spun cotton <br>
+      &bull;&nbsp;Fabric laundered, 4.3 oz. <br>
+      &bull;&nbsp;32 singles thread weight<br>
+      &bull;&nbsp;Set-in 1x1 baby rib collar<br>
+      &bull;&nbsp;Tear away inner label<br>
+      </div>
+      <div class="productOptions" style="width: 50%; display: inline-block;" >
+        <div class="productSubheading">Size:</div>
+        <form class="productFormSize">
+          <div class="productFormSizeButtonContainer"  >
+            <input type="radio" name="geyserFormSize" id="geyserSmall" value="S" onclick="toggleAddToCardActivation('geyserAddToCart','Geyser T-Shirt','softmacrowave','iceland','tshirt','geyserFormSize','geyserFormQuantity','./products/thumbnails/geyserMainThumbnail.png',24.95);" />
+            <label class="productFormSizeButtonLabel" for="geyserSmall">S</label>
+          </div>
+          <div class="productFormSizeButtonContainer" >
+            <input type="radio" name="geyserFormSize" id="geyserMedium" value="M" onclick="toggleAddToCardActivation('geyserAddToCart','Geyser T-Shirt','softmacrowave','iceland','tshirt','geyserFormSize','geyserFormQuantity','./products/thumbnails/geyserMainThumbnail.png',24.95);" />
+            <label class="productFormSizeButtonLabel" for="geyserMedium">M</label>
+          </div>
+          <div class="productFormSizeButtonContainer" >
+            <input type="radio" name="geyserFormSize" id="geyserLarge" value="L" onclick="toggleAddToCardActivation('geyserAddToCart','Geyser T-Shirt','softmacrowave','iceland','tshirt','geyserFormSize','geyserFormQuantity','./products/thumbnails/geyserMainThumbnail.png',24.95);" />
+            <label class="productFormSizeButtonLabel" for="geyserLarge">L</label>
+          </div>
+        </form>
+        <div class="productSubheading" ">Quantity:</div>
+        <form>
+          <select id="geyserFormQuantity" onchange="toggleAddToCardActivation('geyserAddToCart','Geyser T-Shirt','softmacrowave','iceland','tshirt','geyserFormSize','geyserFormQuantity','./products/thumbnails/geyserMainThumbnail.png',24.95);"   name="quantity" style="margin:0px;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
+        </form>
+      </div>
+
+      <div class="productPriceAndAddToCart" style="float: left;width: 100%;">
+        <div class="productPrice" style="float: left;">$24.95</div>
+        <div id="geyserAddToCart" class="productAddToCart" onclick="" style="float: right; height: 30px;">Add To Cart</div>
+      </div>
+
+
+    </div>
+
+    <div style="width: 50%;  border: 1px solid black; font-size: 1em; float: left;">
+      Prints
+    </div>
+
+  </div> -->
+  
+
+
+
+<!-- Header -->
+<header class="  header" style="">
+
+  <img src="./menuicon.png" class="openSidebarButton"  onclick="document.getElementById('sidebarContainer').style.width='28%'; document.getElementById('photoGallery').style.margin='0 0 0 28%';">
+  <h1 style="text-align: center;">JASON OU</h1>
+  <h1 class=w3-medium style="text-align: center;" >MACRO</h1>
+
+  <div style="position: absolute; top: 17.5px; right: 70px; z-index: 500;" >
+    <img class=shoppingCartBlack style="z-index: 500;" id=shoppingCartBlack src="./shoppingCartBlack.png" onclick="toggleCart();">
+    <img class=shoppingCartWhite style="z-index: 500;" id=shoppingCartWhite src="./shoppingCartWhite.png" onclick="toggleCart();">
+    <div id=shoppingCartText class=shoppingCartText >...</div>
+  </div>
+
+</header>
+
+<!-- Photo Grid -->
+
+
+<div id= "hi" class="outermostContainer" style="">
+
+  <div id = "sidebarContainer" class="sidebarContainer" style=""><p></p>
+    
+      <img src="./cross.png" class=closeSidebarButton style="position: absolute; width: 24px; top: 12px; right:6px; transition: .35s ease;" onclick="document.getElementById('sidebarContainer').style.width=0; document.getElementById('photoGallery').style.margin='0 0 0 0';">
+    
+      <a href="/index.html" class="sidebarText" style="">FEATURED</a>
+      <a href="/store" class="sidebarText" style="">STORE</a>
+      <a href="/friends" class="sidebarText">FRIENDS</a>
+      <a href="/aboutme" class="sidebarText">ABOUT ME</a>
+      <p></p>
+      <a href="/galapagos" class=" sidebarText" style="">GALÁPAGOS</a>
+      <a href="/macro" style="color: #000000;" class=" sidebarText" style="">MACRO</a>
+      <a href="/yellowstone" class=" sidebarText" style="">Y. STONE</a>
+      <a href="/newyork" class=" sidebarText" style="">NEW YORK</a>
+      <a href="/china" class=" sidebarText" style="">CHINA</a>
+      <a href="/glencanyon" class="sidebarText" style="">GLEN CANYON</a>
+      <a href="/iceland" class="sidebarText" style="">ICELAND</a>
+      <a href="/russia" class=" sidebarText" style="">RUSSIA</a>
+      <a href="/mexico" class=" sidebarText" style="">MEXICO</a>
+      <a href="/cuba" class=" sidebarText" style="">CUBA</a>
+      <a href="/japan" class=" sidebarText" style="">JAPAN</a>
+      <a href="/singapore" class=" sidebarText" style="">SINGAPORE</a>
+      <a href="/nz" class=" sidebarText" style="">NZ</a>
+      <a href="/australia" class=" sidebarText" style="">AUSTRALIA</a>
+      <a href="/nola" class=" sidebarText" style="">NOLA</a>
+      <a href="/capecod" class=" sidebarText" style="">CAPE COD</a>
+    
+  </div>
+
+  <div id="photoGallery" class="photoGallery" style=" overflow: hidden; " >
+
+    <div class="half-left" style="width: 100%;"><!--START CENTER IMAGE-->
+
+      <!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/sugarbee.jpg" class="progressive replace">
+    <img src="./images/macro/preview/sugarbee.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='sugarbeeLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('sugarbee','sugarbeeLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='sugarbeeCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('sugarbee','sugarbeeCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('sugarbeeCommentAlert').innerHTML='Comments Loading...'; document.getElementById('sugarbeeCommentImage').src='./loader.gif'; document.getElementById('sugarbeeCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('sugarbee','sugarbeeLikeCount'); getCommentCount('sugarbee','sugarbeeCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='sugarbeeCommentBox' class='commentBox'> 
+    <div id='sugarbeeCommentHeader' class="commentHeader">
+      <div id='sugarbeeCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='sugarbeeCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='sugarbeeCommentLoader'>
+    </div>
+  </div>
+
+  <div id='sugarbeeName' style="display: none;">TITLE_REPLACE</div>
+  <div id='sugarbeeCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='sugarbeeDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+
+
+    </div><!--EEND CENTER IMAGE-->
+    
+    <div class="half-left"><!--START HALF-LEFT-->
+
+      <!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/magnolia.jpg" class="progressive replace">
+    <img src="./images/macro/preview/magnolia.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='magnoliaLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('magnolia','magnoliaLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='magnoliaCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('magnolia','magnoliaCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('magnoliaCommentAlert').innerHTML='Comments Loading...'; document.getElementById('magnoliaCommentImage').src='./loader.gif'; document.getElementById('magnoliaCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('magnolia','magnoliaLikeCount'); getCommentCount('magnolia','magnoliaCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='magnoliaCommentBox' class='commentBox'> 
+    <div id='magnoliaCommentHeader' class="commentHeader">
+      <div id='magnoliaCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='magnoliaCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='magnoliaCommentLoader'>
+    </div>
+  </div>
+
+  <div id='magnoliaName' style="display: none;">TITLE_REPLACE</div>
+  <div id='magnoliaCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='magnoliaDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/baubles.jpg" class="progressive replace">
+    <img src="./images/macro/preview/baubles.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='baublesLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('baubles','baublesLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='baublesCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('baubles','baublesCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('baublesCommentAlert').innerHTML='Comments Loading...'; document.getElementById('baublesCommentImage').src='./loader.gif'; document.getElementById('baublesCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('baubles','baublesLikeCount'); getCommentCount('baubles','baublesCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='baublesCommentBox' class='commentBox'> 
+    <div id='baublesCommentHeader' class="commentHeader">
+      <div id='baublesCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='baublesCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='baublesCommentLoader'>
+    </div>
+  </div>
+
+  <div id='baublesName' style="display: none;">TITLE_REPLACE</div>
+  <div id='baublesCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='baublesDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/rose1.jpg" class="progressive replace">
+    <img src="./images/macro/preview/rose1.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='rose1LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('rose1','rose1LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='rose1CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('rose1','rose1CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('rose1CommentAlert').innerHTML='Comments Loading...'; document.getElementById('rose1CommentImage').src='./loader.gif'; document.getElementById('rose1CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('rose1','rose1LikeCount'); getCommentCount('rose1','rose1CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='rose1CommentBox' class='commentBox'> 
+    <div id='rose1CommentHeader' class="commentHeader">
+      <div id='rose1CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='rose1CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='rose1CommentLoader'>
+    </div>
+  </div>
+
+  <div id='rose1Name' style="display: none;">TITLE_REPLACE</div>
+  <div id='rose1CameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='rose1Description' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/zebra.jpg" class="progressive replace">
+    <img src="./images/macro/preview/zebra.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='zebraLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('zebra','zebraLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='zebraCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('zebra','zebraCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('zebraCommentAlert').innerHTML='Comments Loading...'; document.getElementById('zebraCommentImage').src='./loader.gif'; document.getElementById('zebraCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('zebra','zebraLikeCount'); getCommentCount('zebra','zebraCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='zebraCommentBox' class='commentBox'> 
+    <div id='zebraCommentHeader' class="commentHeader">
+      <div id='zebraCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='zebraCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='zebraCommentLoader'>
+    </div>
+  </div>
+
+  <div id='zebraName' style="display: none;">TITLE_REPLACE</div>
+  <div id='zebraCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='zebraDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/raindropsonyellow.jpg" class="progressive replace">
+    <img src="./images/macro/preview/raindropsonyellow.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='raindropsonyellowLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('raindropsonyellow','raindropsonyellowLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='raindropsonyellowCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('raindropsonyellow','raindropsonyellowCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('raindropsonyellowCommentAlert').innerHTML='Comments Loading...'; document.getElementById('raindropsonyellowCommentImage').src='./loader.gif'; document.getElementById('raindropsonyellowCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('raindropsonyellow','raindropsonyellowLikeCount'); getCommentCount('raindropsonyellow','raindropsonyellowCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='raindropsonyellowCommentBox' class='commentBox'> 
+    <div id='raindropsonyellowCommentHeader' class="commentHeader">
+      <div id='raindropsonyellowCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='raindropsonyellowCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='raindropsonyellowCommentLoader'>
+    </div>
+  </div>
+
+  <div id='raindropsonyellowName' style="display: none;">TITLE_REPLACE</div>
+  <div id='raindropsonyellowCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='raindropsonyellowDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/lilacbee.jpg" class="progressive replace">
+    <img src="./images/macro/preview/lilacbee.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='lilacbeeLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('lilacbee','lilacbeeLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='lilacbeeCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('lilacbee','lilacbeeCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('lilacbeeCommentAlert').innerHTML='Comments Loading...'; document.getElementById('lilacbeeCommentImage').src='./loader.gif'; document.getElementById('lilacbeeCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('lilacbee','lilacbeeLikeCount'); getCommentCount('lilacbee','lilacbeeCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='lilacbeeCommentBox' class='commentBox'> 
+    <div id='lilacbeeCommentHeader' class="commentHeader">
+      <div id='lilacbeeCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='lilacbeeCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='lilacbeeCommentLoader'>
+    </div>
+  </div>
+
+  <div id='lilacbeeName' style="display: none;">TITLE_REPLACE</div>
+  <div id='lilacbeeCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='lilacbeeDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/blueberry.jpg" class="progressive replace">
+    <img src="./images/macro/preview/blueberry.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='blueberryLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('blueberry','blueberryLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='blueberryCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('blueberry','blueberryCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('blueberryCommentAlert').innerHTML='Comments Loading...'; document.getElementById('blueberryCommentImage').src='./loader.gif'; document.getElementById('blueberryCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('blueberry','blueberryLikeCount'); getCommentCount('blueberry','blueberryCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='blueberryCommentBox' class='commentBox'> 
+    <div id='blueberryCommentHeader' class="commentHeader">
+      <div id='blueberryCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='blueberryCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='blueberryCommentLoader'>
+    </div>
+  </div>
+
+  <div id='blueberryName' style="display: none;">TITLE_REPLACE</div>
+  <div id='blueberryCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='blueberryDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/yellowpollen.jpg" class="progressive replace">
+    <img src="./images/macro/preview/yellowpollen.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='yellowpollenLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('yellowpollen','yellowpollenLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='yellowpollenCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('yellowpollen','yellowpollenCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('yellowpollenCommentAlert').innerHTML='Comments Loading...'; document.getElementById('yellowpollenCommentImage').src='./loader.gif'; document.getElementById('yellowpollenCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('yellowpollen','yellowpollenLikeCount'); getCommentCount('yellowpollen','yellowpollenCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='yellowpollenCommentBox' class='commentBox'> 
+    <div id='yellowpollenCommentHeader' class="commentHeader">
+      <div id='yellowpollenCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='yellowpollenCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='yellowpollenCommentLoader'>
+    </div>
+  </div>
+
+  <div id='yellowpollenName' style="display: none;">TITLE_REPLACE</div>
+  <div id='yellowpollenCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='yellowpollenDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/yellowconicalflower.jpg" class="progressive replace">
+    <img src="./images/macro/preview/yellowconicalflower.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='yellowconicalflowerLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('yellowconicalflower','yellowconicalflowerLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='yellowconicalflowerCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('yellowconicalflower','yellowconicalflowerCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('yellowconicalflowerCommentAlert').innerHTML='Comments Loading...'; document.getElementById('yellowconicalflowerCommentImage').src='./loader.gif'; document.getElementById('yellowconicalflowerCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('yellowconicalflower','yellowconicalflowerLikeCount'); getCommentCount('yellowconicalflower','yellowconicalflowerCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='yellowconicalflowerCommentBox' class='commentBox'> 
+    <div id='yellowconicalflowerCommentHeader' class="commentHeader">
+      <div id='yellowconicalflowerCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='yellowconicalflowerCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='yellowconicalflowerCommentLoader'>
+    </div>
+  </div>
+
+  <div id='yellowconicalflowerName' style="display: none;">TITLE_REPLACE</div>
+  <div id='yellowconicalflowerCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='yellowconicalflowerDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+
+
+    </div><!--END HALF-LEFT-->
+
+    <div class="half-right"><!--START HALF-RIGHT-->
+      
+      <!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/ladybug.jpg" class="progressive replace">
+    <img src="./images/macro/preview/ladybug.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='ladybugLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('ladybug','ladybugLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='ladybugCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('ladybug','ladybugCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('ladybugCommentAlert').innerHTML='Comments Loading...'; document.getElementById('ladybugCommentImage').src='./loader.gif'; document.getElementById('ladybugCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('ladybug','ladybugLikeCount'); getCommentCount('ladybug','ladybugCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='ladybugCommentBox' class='commentBox'> 
+    <div id='ladybugCommentHeader' class="commentHeader">
+      <div id='ladybugCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='ladybugCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='ladybugCommentLoader'>
+    </div>
+  </div>
+
+  <div id='ladybugName' style="display: none;">TITLE_REPLACE</div>
+  <div id='ladybugCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='ladybugDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/rosepetal.jpg" class="progressive replace">
+    <img src="./images/macro/preview/rosepetal.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='rosepetalLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('rosepetal','rosepetalLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='rosepetalCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('rosepetal','rosepetalCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('rosepetalCommentAlert').innerHTML='Comments Loading...'; document.getElementById('rosepetalCommentImage').src='./loader.gif'; document.getElementById('rosepetalCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('rosepetal','rosepetalLikeCount'); getCommentCount('rosepetal','rosepetalCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='rosepetalCommentBox' class='commentBox'> 
+    <div id='rosepetalCommentHeader' class="commentHeader">
+      <div id='rosepetalCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='rosepetalCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='rosepetalCommentLoader'>
+    </div>
+  </div>
+
+  <div id='rosepetalName' style="display: none;">TITLE_REPLACE</div>
+  <div id='rosepetalCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='rosepetalDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/bubbles1.jpg" class="progressive replace">
+    <img src="./images/macro/preview/bubbles1.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='bubbles1LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('bubbles1','bubbles1LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='bubbles1CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('bubbles1','bubbles1CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('bubbles1CommentAlert').innerHTML='Comments Loading...'; document.getElementById('bubbles1CommentImage').src='./loader.gif'; document.getElementById('bubbles1CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('bubbles1','bubbles1LikeCount'); getCommentCount('bubbles1','bubbles1CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='bubbles1CommentBox' class='commentBox'> 
+    <div id='bubbles1CommentHeader' class="commentHeader">
+      <div id='bubbles1CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='bubbles1CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='bubbles1CommentLoader'>
+    </div>
+  </div>
+
+  <div id='bubbles1Name' style="display: none;">TITLE_REPLACE</div>
+  <div id='bubbles1CameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='bubbles1Description' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/eye.jpg" class="progressive replace">
+    <img src="./images/macro/preview/eye.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='eyeLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('eye','eyeLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='eyeCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('eye','eyeCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('eyeCommentAlert').innerHTML='Comments Loading...'; document.getElementById('eyeCommentImage').src='./loader.gif'; document.getElementById('eyeCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('eye','eyeLikeCount'); getCommentCount('eye','eyeCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='eyeCommentBox' class='commentBox'> 
+    <div id='eyeCommentHeader' class="commentHeader">
+      <div id='eyeCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='eyeCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='eyeCommentLoader'>
+    </div>
+  </div>
+
+  <div id='eyeName' style="display: none;">TITLE_REPLACE</div>
+  <div id='eyeCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='eyeDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/scrubber.jpg" class="progressive replace">
+    <img src="./images/macro/preview/scrubber.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='scrubberLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('scrubber','scrubberLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='scrubberCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('scrubber','scrubberCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('scrubberCommentAlert').innerHTML='Comments Loading...'; document.getElementById('scrubberCommentImage').src='./loader.gif'; document.getElementById('scrubberCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('scrubber','scrubberLikeCount'); getCommentCount('scrubber','scrubberCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='scrubberCommentBox' class='commentBox'> 
+    <div id='scrubberCommentHeader' class="commentHeader">
+      <div id='scrubberCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='scrubberCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='scrubberCommentLoader'>
+    </div>
+  </div>
+
+  <div id='scrubberName' style="display: none;">TITLE_REPLACE</div>
+  <div id='scrubberCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='scrubberDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/galaxy.jpg" class="progressive replace">
+    <img src="./images/macro/preview/galaxy.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='galaxyLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('galaxy','galaxyLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='galaxyCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('galaxy','galaxyCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('galaxyCommentAlert').innerHTML='Comments Loading...'; document.getElementById('galaxyCommentImage').src='./loader.gif'; document.getElementById('galaxyCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('galaxy','galaxyLikeCount'); getCommentCount('galaxy','galaxyCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='galaxyCommentBox' class='commentBox'> 
+    <div id='galaxyCommentHeader' class="commentHeader">
+      <div id='galaxyCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='galaxyCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='galaxyCommentLoader'>
+    </div>
+  </div>
+
+  <div id='galaxyName' style="display: none;">TITLE_REPLACE</div>
+  <div id='galaxyCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='galaxyDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/native.jpg" class="progressive replace">
+    <img src="./images/macro/preview/native.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='nativeLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('native','nativeLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='nativeCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('native','nativeCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('nativeCommentAlert').innerHTML='Comments Loading...'; document.getElementById('nativeCommentImage').src='./loader.gif'; document.getElementById('nativeCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('native','nativeLikeCount'); getCommentCount('native','nativeCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='nativeCommentBox' class='commentBox'> 
+    <div id='nativeCommentHeader' class="commentHeader">
+      <div id='nativeCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='nativeCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='nativeCommentLoader'>
+    </div>
+  </div>
+
+  <div id='nativeName' style="display: none;">TITLE_REPLACE</div>
+  <div id='nativeCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='nativeDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+  <a href="./images/macro/thumbnails/bwflower.jpg" class="progressive replace">
+    <img src="./images/macro/preview/bwflower.jpg" style="width:100%" class="preview" alt="image">
+  </a>
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='bwflowerLikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('bwflower','bwflowerLikeCount');"  > 
+
+      <div class='likeCommentCounter' id='bwflowerCommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('bwflower','bwflowerCommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('bwflowerCommentAlert').innerHTML='Comments Loading...'; document.getElementById('bwflowerCommentImage').src='./loader.gif'; document.getElementById('bwflowerCommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('bwflower','bwflowerLikeCount'); getCommentCount('bwflower','bwflowerCommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='bwflowerCommentBox' class='commentBox'> 
+    <div id='bwflowerCommentHeader' class="commentHeader">
+      <div id='bwflowerCommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='bwflowerCommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='bwflowerCommentLoader'>
+    </div>
+  </div>
+
+  <div id='bwflowerName' style="display: none;">TITLE_REPLACE</div>
+  <div id='bwflowerCameraInfo' style="display: none;">CAMERA_INFO_REPLACE</div>
+  <div id='bwflowerDescription' style="display: none;">DESCRIPTION_REPLACE</div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+
+
+    </div><!--END HALF-RIGHT-->
+
+  </div>
+
+</div>
+  
+<!-- End Page Content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-row  w3-light-grey" style="height: 80px; vertical-align: center; position: absolute; margin-top: 115px; width: 100%;" >
+<br>
+  <div class="footerText" style= "font-size:80%; margin-top:-10px;">©2017 Jason Ou. All rights reserved. </div>
+  <a style="display: block;font-size:80%; margin-bottom: 4px;" class="footerText" href="mailto:jason@jasonandfriends.com?Subject=jasonandfriends" target="_top">jason@jasonandfriends.net</a>
+  <i style="float: left; left: 47%; position: relative; margin-right: 5px;" onclick="location.href='https://www.facebook.com/angrystapler?ref=bookmarks'" class="fa fa-facebook-official w3-opacity"></i>
+  <i style="float: left; left: 47%; position: relative;" onclick="location.href='https://www.linkedin.com/in/oujason/'" class="fa fa-linkedin w3-opacity"></i>
+</footer>
+  
+</body>
+</html>
+
+
+
+<script>
+
+   var applicationId = 'sq0idp-J4wlWYYQ45V8u0bvIKJjZA'; // <-- Add your application's ID here
+
+    // You can delete this 'if' statement. It's here to notify you that you need
+    // to provide your application ID.
+    if (applicationId == '') {
+      alert('You need to provide a value for the applicationId variable.');
+    }
+
+    // Initializes the payment form. See the documentation for descriptions of
+    // each of these parameters.
+    var paymentForm = new SqPaymentForm({
+      applicationId: applicationId,
+      inputClass: 'sq-input',
+      inputStyles: [
+        {
+          fontSize: '15px'
+        }
+      ],
+      cardNumber: {
+        elementId: 'sq-card-number',
+        placeholder: '•••• •••• •••• ••••'
+      },
+      cvv: {
+        elementId: 'sq-cvv',
+        placeholder: 'CVV'
+      },
+      expirationDate: {
+        elementId: 'sq-expiration-date',
+        placeholder: 'MM/YY'
+      },
+      postalCode: {
+        elementId: 'sq-postal-code'
+      },
+      callbacks: {
+
+        // Called when the SqPaymentForm completes a request to generate a card
+        // nonce, even if the request failed because of an error.
+        cardNonceResponseReceived: function(errors, nonce, cardData) {
+          if (errors) {
+            var errorString="";
+            console.log("Encountered errors:");
+
+            // This logs all errors encountered during nonce generation to the
+            // Javascript console.
+            errors.forEach(function(error) {
+              console.log('  ' + error.message);
+              errorString=errorString+error.message+"\n";
+            });
+
+            alert(errorString);
+
+          // No errors occurred. Extract the card nonce.
+          } else {
+            document.getElementById('card-nonce').value = nonce;
+            checkOutConfirmation(nonce, cardData);
+
+          }
+        },
+
+        unsupportedBrowserDetected: function() {
+          // Fill in this callback to alert buyers when their browser is not supported.
+        },
+
+        // Fill in these cases to respond to various events that can occur while a
+        // buyer is using the payment form.
+        inputEventReceived: function(inputEvent) {
+          switch (inputEvent.eventType) {
+            case 'focusClassAdded':
+              // Handle as desired
+              break;
+            case 'focusClassRemoved':
+              // Handle as desired
+              break;
+            case 'errorClassAdded':
+              // Handle as desired
+              break;
+            case 'errorClassRemoved':
+              // Handle as desired
+              break;
+            case 'cardBrandChanged':
+              // Handle as desired
+              break;
+            case 'postalCodeChanged':
+              // Handle as desired
+              break;
+          }
+        },
+
+        paymentFormLoaded: function() {
+          // Fill in this callback to perform actions after the payment form is
+          // done loading (such as setting the postal code field programmatically).
+          // paymentForm.setPostalCode('94103');
+        }
+      }
+    });
+
+    // This function is called when a buyer clicks the Submit button on the webpage
+    // to charge their card.
+    function requestCardNonce(event) {
+
+      // This prevents the Submit button from submitting its associated form.
+      // Instead, clicking the Submit button should tell the SqPaymentForm to generate
+      // a card nonce, which the next line does.
+      event.preventDefault();
+
+      paymentForm.requestCardNonce();
+    } 
+</script>

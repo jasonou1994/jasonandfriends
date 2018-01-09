@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html>
+<title>Friends</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="googleRaleway.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="jasonandfriends.css">
+<script type='text/javascript' src='jasonandfriends.js'></script>
+<script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
+<head>
+  <link rel="icon" href="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-1/c0.14.320.320/p320x320/10544355_10207124754778174_2507783529110791968_n.jpg?oh=264e6e1ffdd7ba5c6d9d567c0b924965&oe=59783CC9">
+  <meta property="og:title" content="jasonandfriends" />
+  <meta property="og:url" content="http://www.jasonandfriends.net" />
+  <meta property="og:image" content="https://scontent-iad3-1.xx.fbcdn.net/v/t1.0-1/c0.14.320.320/p320x320/10544355_10207124754778174_2507783529110791968_n.jpg?oh=264e6e1ffdd7ba5c6d9d567c0b924965&oe=59783CC9" />
+  <meta property="og:description" content="I initially envisioned this site as just as a place to store and share my favorite travel photos, but as I got started I realized that it was a great opportunity to really challenge myself technically by building everything myself from scratch. 
+
+I'm proud to say that the entire site right now, from the front-end design to the servers and infrastructure that lie below, are nearly entirely the product of my own efforts (which is also why there's still bugs and uncompleted features everywhere). 
+
+it definitely wasnt an easy journey--Along the way I've had the opportunity to practice or get acquainted with so many different technologies, and there's still so much to do. There have been many moments in the past weeks where I've wanted to tear my hair out and just give up. But, I really think this is one of the best things I've ever done. I'm 100% certain now that I want to enter the tech industry at some point in my life, even though I couldn't get there straight out of college. 
+
+To all my friends (esp. Tammy) and family thank you so much for all the memories over the years!! I love you all so much. 
+
+Technologies used: 
+Google Cloud Compute Engine
+Apache HTTP Server
+Unix shell
+MYSQL
+PHP
+CSS
+HTML
+JavaScript
+Java
+Google Domains 
+
+Software used: 
+Ubuntu 14
+Mac OS
+Sublime Text
+Eclipse
+Sequel Pro" />
+
+
+</head>
+
+
+<body style="" onload="checkCookie(); getCartCount('shoppingCartText');getCartCount('cartActualCounter');">
+
+<!-- !PAGE CONTENT! -->
+<div id="overlay" class="overlay" style="" onclick="closeCart();">
+</div>
+
+<div id="cartContainer" class="cartContainer" style="height: 0; opacity: 0; max-height: 95%; overflow: scroll; ">
+
+	<div class="cartHeader" style="">
+	  <div class="cartHeaderTitle" id="cartHeaderTitle" style=""> Cart </div>
+	  <div class="cartHeaderIcons" style="" >
+	    <div class="cartHeaderIconsCount" id="cartActualCounter" style="">...</div>
+	    <img class="cartHeaderIconsShoppingCart" src="./shoppingCartBlack.png" >
+	    <img class="cartHeaderIconsClose" style="" src="./cross.png" onclick="closeCart();">
+	  </div>
+	</div>
+
+	<div class="cartMessageEmpty" id="cartMessageEmpty" style="">
+	  Looks like your cart is empty! <br> You can add some items in the shop.
+	</div>
+
+	<div class="cartMessageLoading" id="cartMessageLoading" style="">
+	  Loading... 
+	  <img class="cartMessageLoadingGif" src="./loader.gif" style="">
+	</div>
+
+  <div class='checkOutProgressBar' id = 'checkOutProgressBar' style="display: none;">
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarDelivery' style="border-width: 0 0 1px 1px;"> Delivery</div>
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarBilling' style="border-width: 0 0 1px 1px;"> Billing</div>
+    <div class = checkOutProgressBarLabel id = 'checkOutProgressBarConfirmation' style="border-width: 0 1px 1px 1px;"> Confirm</div>
+  </div>
+
+  <div class="cartDeliveryBillingConfirmation" id="cartDeliveryBillingConfirmation" style="height: auto;">
+  </div>
+
+	<div class="cartContentsContainer" id="cartContentsContainer" style="">
+		<!--CART CONTENTS ADDED IN JAVASCRIPT ON CLICK VIA HEADER, SEE toggleCart()-->
+	</div>
+
+  <div class="cartPaymentConfirmation" id="cartPaymentConfirmation" style="height: auto; width: 100%; display: none;">
+    <div class='checkOutGroupHeading' id='cartPaymentConfirmationTitle2' style="width: 100%; display: block; float: left;">
+      Shipping Address
+      <div style="font-size: 14px;margin-top: -4px;"> (Shipping is free! Items will be delivered via FedEx in 1-2 weeks.)</div>
+      <div id=shippingAddressConfirmationBox style="display: block;float: left;margin-left: 5%; width: 90%;overflow: auto; font-size: 14px;">66 North Hillside Ave<br>Livingston, NJ
+      </div>
+    </div>
+
+    <div class='checkOutGroupHeading' id='cartPaymentConfirmationTitle' style="width: 100%; display: block; float: left;">
+      Payment Info
+    </div>
+    <div id=fakeCC style="width: 90%; padding-bottom: 50.25%; background-color: #f4f4f4; display: block; float: left;  border-radius: 6px; margin: 3% 5% 5% 5%; position: relative; border: 1px solid #888888;  ">
+      
+      <img id= fakeCCType src="" style="width: 20%; top: 30%; left: 7%; position: absolute;">
+      <div id = fakeCCNumber style="width: 90%; top: 50%; left: 7%; position: absolute; font-size: 22px; color: #383838;"></div>
+
+      <div id= fakeCCExpLabel style=" top: 66%; left: 7%; position: absolute; font-size: 13px;color: #383838;">Exp</div>
+      <div id=fakeCCExpText style="top: 64%; left: 15%; position: absolute; font-size: 16px;color: #383838;"></div>
+
+      <div id=fakeCCZipLabel style=" top: 66%; left: 40%; position: absolute; font-size: 13px;color: #383838;">Zip</div>
+      <div id=fakeCCZipText style="top: 64%; left: 47%; position: absolute; font-size: 16px;color: #383838;">07039</div>
+    </div>
+  </div>
+
+  <div id = "cartCreditCardForm" style="display: none; ">
+    <label style="color: #383838;">Card Number</label>
+    <div id="sq-card-number"></div>
+    <label style="color: #383838;">CVV</label>
+    <div id="sq-cvv"></div>
+    <label style="color: #383838;">Expiration Date</label>
+    <div id="sq-expiration-date"></div>
+    <label style="color: #383838;">Postal Code</label>
+    <div id="sq-postal-code"></div>
+    <!--
+      After the SqPaymentForm generates a card nonce, *this* form POSTs the generated
+      card nonce to your application's server.
+
+      You should replace the action attribute of the form with the path of
+      the URL you want to POST the nonce to (for example, "/process-card")
+    -->
+    <form id="nonce-form" novalidate action="REPLACE_ME" method="post">
+      <!--
+        Whenever a nonce is generated, it's assigned as the value of this hidden
+        input field.
+      -->
+      <input type="hidden" id="card-nonce" name="nonce">
+
+      <!--
+        Clicking this Submit button kicks off the process to generate a card nonce
+        from the buyer's card information.
+      -->
+    </form>
+  </div>
+
+
+
+	<div class="cartCheckOutContainer" id="cartCheckOutContainer" style="">
+	  <div id="cartCheckOutPrice" style="float: left; font-size: 20px; margin-top: 3px; color: #383838;">
+	  	...
+	  </div>
+	  <div class="cartCheckOut" id='cartCheckOut' onclick="checkOutDelivery();">Check Out</div>
+    <div class='cartBack' id = checkOutBackButton> Back</div>
+	</div>
+</div>
+
+<div id = "hiddenStorage" style="display: none;">
+	
+  <div id = "nonceStorage">
+  </div>
+</div>
+
+
+<!-- Header -->
+<header class="  header" style="">
+
+  <img src="./menuicon.png" class="openSidebarButton"  onclick="document.getElementById('sidebarContainer').style.width='28%'; document.getElementById('photoGallery').style.margin='0 0 0 28%';">
+  <h1 style="text-align: center;">JASON OU</h1>
+  <h1 class=w3-medium style="text-align: center;" >FRIENDS</h1>
+
+  <div style="position: absolute; top: 17.5px; right: 70px;" >
+    <img class=shoppingCartBlack id=shoppingCartBlack src="./shoppingCartBlack.png" onclick="toggleCart();">
+    <img class=shoppingCartWhite id=shoppingCartWhite src="./shoppingCartWhite.png" onclick="toggleCart();">
+    <div id=shoppingCartText class=shoppingCartText >...</div>
+  </div>
+
+</header>
+
+<!-- Photo Grid -->
+
+
+<div id= "hi" class="outermostContainer" style="">
+
+  <div id = "sidebarContainer" class="sidebarContainer" style=""><p></p>
+    
+      <img src="./cross.png" class=closeSidebarButton style="position: absolute; width: 24px; top: 12px; right:6px; transition: .35s ease;" onclick="document.getElementById('sidebarContainer').style.width=0; document.getElementById('photoGallery').style.margin='0 0 0 0';">
+    
+      <a href="/index.html" class="sidebarText" style="">FEATURED</a>
+      <a href="/store" class="sidebarText" style="">STORE</a>
+      <a href="/friends" style="color: #000000;" class="sidebarText">FRIENDS</a>
+      <a href="/aboutme" class="sidebarText">ABOUT ME</a>
+      <p></p>
+      <a href="/yellowstone" class=" sidebarText" style="">Y. STONE</a>
+      <a href="/newyork" class=" sidebarText" style="">NEW YORK</a>
+      <a href="/china" class=" sidebarText" style="">CHINA</a>
+      <a href="/glencanyon" class="sidebarText" style="">GLEN CANYON</a>
+      <a href="/iceland" class="sidebarText" style="">ICELAND</a>
+      <a href="/russia" class=" sidebarText" style="">RUSSIA</a>
+      <a href="/mexico" class=" sidebarText" style="">MEXICO</a>
+      <a href="/cuba" class=" sidebarText" style="">CUBA</a>
+      <a href="/japan" class=" sidebarText" style="">JAPAN</a>
+      <a href="/singapore" class=" sidebarText" style="">SINGAPORE</a>
+      <a href="/nz" class=" sidebarText" style="">NZ</a>
+      <a href="/australia" class=" sidebarText" style="">AUSTRALIA</a>
+      <a href="/nola" class=" sidebarText" style="">NOLA</a>
+      <a href="/capecod" class=" sidebarText" style="">CAPE COD</a>
+      <a href="/misc" class=" sidebarText" style="">MISC</a>
+    
+  </div>
+
+  <div id="photoGallery" class="photoGallery" style=" overflow: hidden; " >
+
+
+    <div class="half-left"><!--START HALF-LEFT-->
+
+      <!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/69.jpg"> -->
+    <img src="./images/friends/thumbnails/69.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='69LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('69','69LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='69CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('69','69CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('69CommentAlert').innerHTML='Comments Loading...'; document.getElementById('69CommentImage').src='./loader.gif'; document.getElementById('69CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('69','69LikeCount'); getCommentCount('69','69CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='69CommentBox' class='commentBox'> 
+    <div id='69CommentHeader' class="commentHeader">
+      <div id='69CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='69CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='69CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/70.jpg"> -->
+    <img src="./images/friends/thumbnails/70.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='70LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('70','70LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='70CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('70','70CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('70CommentAlert').innerHTML='Comments Loading...'; document.getElementById('70CommentImage').src='./loader.gif'; document.getElementById('70CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('70','70LikeCount'); getCommentCount('70','70CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='70CommentBox' class='commentBox'> 
+    <div id='70CommentHeader' class="commentHeader">
+      <div id='70CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='70CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='70CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/71.jpg"> -->
+    <img src="./images/friends/thumbnails/71.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='71LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('71','71LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='71CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('71','71CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('71CommentAlert').innerHTML='Comments Loading...'; document.getElementById('71CommentImage').src='./loader.gif'; document.getElementById('71CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('71','71LikeCount'); getCommentCount('71','71CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='71CommentBox' class='commentBox'> 
+    <div id='71CommentHeader' class="commentHeader">
+      <div id='71CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='71CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='71CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/72.jpg"> -->
+    <img src="./images/friends/thumbnails/72.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='72LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('72','72LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='72CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('72','72CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('72CommentAlert').innerHTML='Comments Loading...'; document.getElementById('72CommentImage').src='./loader.gif'; document.getElementById('72CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('72','72LikeCount'); getCommentCount('72','72CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='72CommentBox' class='commentBox'> 
+    <div id='72CommentHeader' class="commentHeader">
+      <div id='72CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='72CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='72CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/73.jpg"> -->
+    <img src="./images/friends/thumbnails/73.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='73LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('73','73LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='73CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('73','73CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('73CommentAlert').innerHTML='Comments Loading...'; document.getElementById('73CommentImage').src='./loader.gif'; document.getElementById('73CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('73','73LikeCount'); getCommentCount('73','73CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='73CommentBox' class='commentBox'> 
+    <div id='73CommentHeader' class="commentHeader">
+      <div id='73CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='73CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='73CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/74.jpg"> -->
+    <img src="./images/friends/thumbnails/74.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='74LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('74','74LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='74CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('74','74CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('74CommentAlert').innerHTML='Comments Loading...'; document.getElementById('74CommentImage').src='./loader.gif'; document.getElementById('74CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('74','74LikeCount'); getCommentCount('74','74CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='74CommentBox' class='commentBox'> 
+    <div id='74CommentHeader' class="commentHeader">
+      <div id='74CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='74CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='74CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/7.jpg"> -->
+    <img src="./images/friends/thumbnails/7.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='7LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('7','7LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='7CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('7','7CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('7CommentAlert').innerHTML='Comments Loading...'; document.getElementById('7CommentImage').src='./loader.gif'; document.getElementById('7CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('7','7LikeCount'); getCommentCount('7','7CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='7CommentBox' class='commentBox'> 
+    <div id='7CommentHeader' class="commentHeader">
+      <div id='7CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='7CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='7CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/8.jpg"> -->
+    <img src="./images/friends/thumbnails/8.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='8LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('8','8LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='8CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('8','8CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('8CommentAlert').innerHTML='Comments Loading...'; document.getElementById('8CommentImage').src='./loader.gif'; document.getElementById('8CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('8','8LikeCount'); getCommentCount('8','8CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='8CommentBox' class='commentBox'> 
+    <div id='8CommentHeader' class="commentHeader">
+      <div id='8CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='8CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='8CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/9.jpg"> -->
+    <img src="./images/friends/thumbnails/9.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='9LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('9','9LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='9CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('9','9CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('9CommentAlert').innerHTML='Comments Loading...'; document.getElementById('9CommentImage').src='./loader.gif'; document.getElementById('9CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('9','9LikeCount'); getCommentCount('9','9CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='9CommentBox' class='commentBox'> 
+    <div id='9CommentHeader' class="commentHeader">
+      <div id='9CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='9CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='9CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/10.jpg"> -->
+    <img src="./images/friends/thumbnails/10.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='10LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('10','10LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='10CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('10','10CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('10CommentAlert').innerHTML='Comments Loading...'; document.getElementById('10CommentImage').src='./loader.gif'; document.getElementById('10CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('10','10LikeCount'); getCommentCount('10','10CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='10CommentBox' class='commentBox'> 
+    <div id='10CommentHeader' class="commentHeader">
+      <div id='10CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='10CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='10CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/11.jpg"> -->
+    <img src="./images/friends/thumbnails/11.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='11LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('11','11LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='11CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('11','11CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('11CommentAlert').innerHTML='Comments Loading...'; document.getElementById('11CommentImage').src='./loader.gif'; document.getElementById('11CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('11','11LikeCount'); getCommentCount('11','11CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='11CommentBox' class='commentBox'> 
+    <div id='11CommentHeader' class="commentHeader">
+      <div id='11CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='11CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='11CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/12.jpg"> -->
+    <img src="./images/friends/thumbnails/12.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='12LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('12','12LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='12CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('12','12CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('12CommentAlert').innerHTML='Comments Loading...'; document.getElementById('12CommentImage').src='./loader.gif'; document.getElementById('12CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('12','12LikeCount'); getCommentCount('12','12CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='12CommentBox' class='commentBox'> 
+    <div id='12CommentHeader' class="commentHeader">
+      <div id='12CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='12CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='12CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/13.jpg"> -->
+    <img src="./images/friends/thumbnails/13.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='13LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('13','13LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='13CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('13','13CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('13CommentAlert').innerHTML='Comments Loading...'; document.getElementById('13CommentImage').src='./loader.gif'; document.getElementById('13CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('13','13LikeCount'); getCommentCount('13','13CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='13CommentBox' class='commentBox'> 
+    <div id='13CommentHeader' class="commentHeader">
+      <div id='13CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='13CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='13CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/14.jpg"> -->
+    <img src="./images/friends/thumbnails/14.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='14LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('14','14LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='14CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('14','14CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('14CommentAlert').innerHTML='Comments Loading...'; document.getElementById('14CommentImage').src='./loader.gif'; document.getElementById('14CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('14','14LikeCount'); getCommentCount('14','14CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='14CommentBox' class='commentBox'> 
+    <div id='14CommentHeader' class="commentHeader">
+      <div id='14CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='14CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='14CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/15.jpg"> -->
+    <img src="./images/friends/thumbnails/15.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='15LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('15','15LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='15CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('15','15CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('15CommentAlert').innerHTML='Comments Loading...'; document.getElementById('15CommentImage').src='./loader.gif'; document.getElementById('15CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('15','15LikeCount'); getCommentCount('15','15CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='15CommentBox' class='commentBox'> 
+    <div id='15CommentHeader' class="commentHeader">
+      <div id='15CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='15CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='15CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/16.jpg"> -->
+    <img src="./images/friends/thumbnails/16.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='16LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('16','16LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='16CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('16','16CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('16CommentAlert').innerHTML='Comments Loading...'; document.getElementById('16CommentImage').src='./loader.gif'; document.getElementById('16CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('16','16LikeCount'); getCommentCount('16','16CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='16CommentBox' class='commentBox'> 
+    <div id='16CommentHeader' class="commentHeader">
+      <div id='16CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='16CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='16CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/17.jpg"> -->
+    <img src="./images/friends/thumbnails/17.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='17LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('17','17LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='17CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('17','17CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('17CommentAlert').innerHTML='Comments Loading...'; document.getElementById('17CommentImage').src='./loader.gif'; document.getElementById('17CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('17','17LikeCount'); getCommentCount('17','17CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='17CommentBox' class='commentBox'> 
+    <div id='17CommentHeader' class="commentHeader">
+      <div id='17CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='17CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='17CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/18.jpg"> -->
+    <img src="./images/friends/thumbnails/18.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='18LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('18','18LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='18CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('18','18CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('18CommentAlert').innerHTML='Comments Loading...'; document.getElementById('18CommentImage').src='./loader.gif'; document.getElementById('18CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('18','18LikeCount'); getCommentCount('18','18CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='18CommentBox' class='commentBox'> 
+    <div id='18CommentHeader' class="commentHeader">
+      <div id='18CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='18CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='18CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/19.jpg"> -->
+    <img src="./images/friends/thumbnails/19.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='19LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('19','19LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='19CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('19','19CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('19CommentAlert').innerHTML='Comments Loading...'; document.getElementById('19CommentImage').src='./loader.gif'; document.getElementById('19CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('19','19LikeCount'); getCommentCount('19','19CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='19CommentBox' class='commentBox'> 
+    <div id='19CommentHeader' class="commentHeader">
+      <div id='19CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='19CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='19CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/20.jpg"> -->
+    <img src="./images/friends/thumbnails/20.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='20LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('20','20LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='20CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('20','20CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('20CommentAlert').innerHTML='Comments Loading...'; document.getElementById('20CommentImage').src='./loader.gif'; document.getElementById('20CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('20','20LikeCount'); getCommentCount('20','20CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='20CommentBox' class='commentBox'> 
+    <div id='20CommentHeader' class="commentHeader">
+      <div id='20CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='20CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='20CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/21.jpg"> -->
+    <img src="./images/friends/thumbnails/21.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='21LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('21','21LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='21CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('21','21CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('21CommentAlert').innerHTML='Comments Loading...'; document.getElementById('21CommentImage').src='./loader.gif'; document.getElementById('21CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('21','21LikeCount'); getCommentCount('21','21CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='21CommentBox' class='commentBox'> 
+    <div id='21CommentHeader' class="commentHeader">
+      <div id='21CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='21CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='21CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/22.jpg"> -->
+    <img src="./images/friends/thumbnails/22.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='22LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('22','22LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='22CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('22','22CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('22CommentAlert').innerHTML='Comments Loading...'; document.getElementById('22CommentImage').src='./loader.gif'; document.getElementById('22CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('22','22LikeCount'); getCommentCount('22','22CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='22CommentBox' class='commentBox'> 
+    <div id='22CommentHeader' class="commentHeader">
+      <div id='22CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='22CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='22CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/23.jpg"> -->
+    <img src="./images/friends/thumbnails/23.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='23LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('23','23LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='23CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('23','23CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('23CommentAlert').innerHTML='Comments Loading...'; document.getElementById('23CommentImage').src='./loader.gif'; document.getElementById('23CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('23','23LikeCount'); getCommentCount('23','23CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='23CommentBox' class='commentBox'> 
+    <div id='23CommentHeader' class="commentHeader">
+      <div id='23CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='23CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='23CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/24.jpg"> -->
+    <img src="./images/friends/thumbnails/24.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='24LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('24','24LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='24CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('24','24CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('24CommentAlert').innerHTML='Comments Loading...'; document.getElementById('24CommentImage').src='./loader.gif'; document.getElementById('24CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('24','24LikeCount'); getCommentCount('24','24CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='24CommentBox' class='commentBox'> 
+    <div id='24CommentHeader' class="commentHeader">
+      <div id='24CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='24CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='24CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/25.jpg"> -->
+    <img src="./images/friends/thumbnails/25.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='25LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('25','25LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='25CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('25','25CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('25CommentAlert').innerHTML='Comments Loading...'; document.getElementById('25CommentImage').src='./loader.gif'; document.getElementById('25CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('25','25LikeCount'); getCommentCount('25','25CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='25CommentBox' class='commentBox'> 
+    <div id='25CommentHeader' class="commentHeader">
+      <div id='25CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='25CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='25CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/26.jpg"> -->
+    <img src="./images/friends/thumbnails/26.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='26LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('26','26LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='26CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('26','26CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('26CommentAlert').innerHTML='Comments Loading...'; document.getElementById('26CommentImage').src='./loader.gif'; document.getElementById('26CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('26','26LikeCount'); getCommentCount('26','26CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='26CommentBox' class='commentBox'> 
+    <div id='26CommentHeader' class="commentHeader">
+      <div id='26CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='26CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='26CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/27.jpg"> -->
+    <img src="./images/friends/thumbnails/27.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='27LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('27','27LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='27CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('27','27CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('27CommentAlert').innerHTML='Comments Loading...'; document.getElementById('27CommentImage').src='./loader.gif'; document.getElementById('27CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('27','27LikeCount'); getCommentCount('27','27CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='27CommentBox' class='commentBox'> 
+    <div id='27CommentHeader' class="commentHeader">
+      <div id='27CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='27CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='27CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/28.jpg"> -->
+    <img src="./images/friends/thumbnails/28.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='28LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('28','28LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='28CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('28','28CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('28CommentAlert').innerHTML='Comments Loading...'; document.getElementById('28CommentImage').src='./loader.gif'; document.getElementById('28CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('28','28LikeCount'); getCommentCount('28','28CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='28CommentBox' class='commentBox'> 
+    <div id='28CommentHeader' class="commentHeader">
+      <div id='28CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='28CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='28CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/29.jpg"> -->
+    <img src="./images/friends/thumbnails/29.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='29LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('29','29LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='29CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('29','29CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('29CommentAlert').innerHTML='Comments Loading...'; document.getElementById('29CommentImage').src='./loader.gif'; document.getElementById('29CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('29','29LikeCount'); getCommentCount('29','29CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='29CommentBox' class='commentBox'> 
+    <div id='29CommentHeader' class="commentHeader">
+      <div id='29CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='29CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='29CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/30.jpg"> -->
+    <img src="./images/friends/thumbnails/30.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='30LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('30','30LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='30CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('30','30CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('30CommentAlert').innerHTML='Comments Loading...'; document.getElementById('30CommentImage').src='./loader.gif'; document.getElementById('30CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('30','30LikeCount'); getCommentCount('30','30CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='30CommentBox' class='commentBox'> 
+    <div id='30CommentHeader' class="commentHeader">
+      <div id='30CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='30CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='30CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/31.jpg"> -->
+    <img src="./images/friends/thumbnails/31.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='31LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('31','31LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='31CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('31','31CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('31CommentAlert').innerHTML='Comments Loading...'; document.getElementById('31CommentImage').src='./loader.gif'; document.getElementById('31CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('31','31LikeCount'); getCommentCount('31','31CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='31CommentBox' class='commentBox'> 
+    <div id='31CommentHeader' class="commentHeader">
+      <div id='31CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='31CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='31CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/32.jpg"> -->
+    <img src="./images/friends/thumbnails/32.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='32LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('32','32LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='32CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('32','32CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('32CommentAlert').innerHTML='Comments Loading...'; document.getElementById('32CommentImage').src='./loader.gif'; document.getElementById('32CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('32','32LikeCount'); getCommentCount('32','32CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='32CommentBox' class='commentBox'> 
+    <div id='32CommentHeader' class="commentHeader">
+      <div id='32CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='32CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='32CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/33.jpg"> -->
+    <img src="./images/friends/thumbnails/33.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='33LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('33','33LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='33CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('33','33CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('33CommentAlert').innerHTML='Comments Loading...'; document.getElementById('33CommentImage').src='./loader.gif'; document.getElementById('33CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('33','33LikeCount'); getCommentCount('33','33CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='33CommentBox' class='commentBox'> 
+    <div id='33CommentHeader' class="commentHeader">
+      <div id='33CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='33CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='33CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/34.jpg"> -->
+    <img src="./images/friends/thumbnails/34.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='34LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('34','34LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='34CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('34','34CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('34CommentAlert').innerHTML='Comments Loading...'; document.getElementById('34CommentImage').src='./loader.gif'; document.getElementById('34CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('34','34LikeCount'); getCommentCount('34','34CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='34CommentBox' class='commentBox'> 
+    <div id='34CommentHeader' class="commentHeader">
+      <div id='34CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='34CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='34CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/35.jpg"> -->
+    <img src="./images/friends/thumbnails/35.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='35LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('35','35LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='35CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('35','35CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('35CommentAlert').innerHTML='Comments Loading...'; document.getElementById('35CommentImage').src='./loader.gif'; document.getElementById('35CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('35','35LikeCount'); getCommentCount('35','35CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='35CommentBox' class='commentBox'> 
+    <div id='35CommentHeader' class="commentHeader">
+      <div id='35CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='35CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='35CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/75.jpg"> -->
+    <img src="./images/friends/thumbnails/75.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='75LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('75','75LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='75CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('75','75CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('75CommentAlert').innerHTML='Comments Loading...'; document.getElementById('75CommentImage').src='./loader.gif'; document.getElementById('75CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('75','75LikeCount'); getCommentCount('75','75CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='75CommentBox' class='commentBox'> 
+    <div id='75CommentHeader' class="commentHeader">
+      <div id='75CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='75CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='75CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/66.jpg"> -->
+    <img src="./images/friends/thumbnails/66.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='66LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('66','66LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='66CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('66','66CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('66CommentAlert').innerHTML='Comments Loading...'; document.getElementById('66CommentImage').src='./loader.gif'; document.getElementById('66CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('66','66LikeCount'); getCommentCount('66','66CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='66CommentBox' class='commentBox'> 
+    <div id='66CommentHeader' class="commentHeader">
+      <div id='66CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='66CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='66CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/67.jpg"> -->
+    <img src="./images/friends/thumbnails/67.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='67LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('67','67LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='67CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('67','67CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('67CommentAlert').innerHTML='Comments Loading...'; document.getElementById('67CommentImage').src='./loader.gif'; document.getElementById('67CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('67','67LikeCount'); getCommentCount('67','67CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='67CommentBox' class='commentBox'> 
+    <div id='67CommentHeader' class="commentHeader">
+      <div id='67CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='67CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='67CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/68.jpg"> -->
+    <img src="./images/friends/thumbnails/68.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='68LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('68','68LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='68CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('68','68CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('68CommentAlert').innerHTML='Comments Loading...'; document.getElementById('68CommentImage').src='./loader.gif'; document.getElementById('68CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('68','68LikeCount'); getCommentCount('68','68CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='68CommentBox' class='commentBox'> 
+    <div id='68CommentHeader' class="commentHeader">
+      <div id='68CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='68CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='68CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/76.jpg"> -->
+    <img src="./images/friends/thumbnails/76.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='76LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('76','76LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='76CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('76','76CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('76CommentAlert').innerHTML='Comments Loading...'; document.getElementById('76CommentImage').src='./loader.gif'; document.getElementById('76CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('76','76LikeCount'); getCommentCount('76','76CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='76CommentBox' class='commentBox'> 
+    <div id='76CommentHeader' class="commentHeader">
+      <div id='76CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='76CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='76CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+
+
+    </div><!--END HALF-LEFT-->
+
+    <div class="half-right"><!--START HALF-RIGHT-->
+      
+      <!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/35.jpg"> -->
+    <img src="./images/friends/thumbnails/35.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='35LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('35','35LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='35CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('35','35CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('35CommentAlert').innerHTML='Comments Loading...'; document.getElementById('35CommentImage').src='./loader.gif'; document.getElementById('35CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('35','35LikeCount'); getCommentCount('35','35CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='35CommentBox' class='commentBox'> 
+    <div id='35CommentHeader' class="commentHeader">
+      <div id='35CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='35CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='35CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/36.jpg"> -->
+    <img src="./images/friends/thumbnails/36.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='36LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('36','36LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='36CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('36','36CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('36CommentAlert').innerHTML='Comments Loading...'; document.getElementById('36CommentImage').src='./loader.gif'; document.getElementById('36CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('36','36LikeCount'); getCommentCount('36','36CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='36CommentBox' class='commentBox'> 
+    <div id='36CommentHeader' class="commentHeader">
+      <div id='36CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='36CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='36CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/37.jpg"> -->
+    <img src="./images/friends/thumbnails/37.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='37LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('37','37LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='37CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('37','37CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('37CommentAlert').innerHTML='Comments Loading...'; document.getElementById('37CommentImage').src='./loader.gif'; document.getElementById('37CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('37','37LikeCount'); getCommentCount('37','37CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='37CommentBox' class='commentBox'> 
+    <div id='37CommentHeader' class="commentHeader">
+      <div id='37CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='37CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='37CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/38.jpg"> -->
+    <img src="./images/friends/thumbnails/38.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='38LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('38','38LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='38CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('38','38CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('38CommentAlert').innerHTML='Comments Loading...'; document.getElementById('38CommentImage').src='./loader.gif'; document.getElementById('38CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('38','38LikeCount'); getCommentCount('38','38CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='38CommentBox' class='commentBox'> 
+    <div id='38CommentHeader' class="commentHeader">
+      <div id='38CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='38CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='38CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/39.jpg"> -->
+    <img src="./images/friends/thumbnails/39.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='39LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('39','39LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='39CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('39','39CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('39CommentAlert').innerHTML='Comments Loading...'; document.getElementById('39CommentImage').src='./loader.gif'; document.getElementById('39CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('39','39LikeCount'); getCommentCount('39','39CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='39CommentBox' class='commentBox'> 
+    <div id='39CommentHeader' class="commentHeader">
+      <div id='39CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='39CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='39CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/40.jpg"> -->
+    <img src="./images/friends/thumbnails/40.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='40LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('40','40LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='40CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('40','40CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('40CommentAlert').innerHTML='Comments Loading...'; document.getElementById('40CommentImage').src='./loader.gif'; document.getElementById('40CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('40','40LikeCount'); getCommentCount('40','40CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='40CommentBox' class='commentBox'> 
+    <div id='40CommentHeader' class="commentHeader">
+      <div id='40CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='40CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='40CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/41.jpg"> -->
+    <img src="./images/friends/thumbnails/41.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='41LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('41','41LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='41CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('41','41CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('41CommentAlert').innerHTML='Comments Loading...'; document.getElementById('41CommentImage').src='./loader.gif'; document.getElementById('41CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('41','41LikeCount'); getCommentCount('41','41CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='41CommentBox' class='commentBox'> 
+    <div id='41CommentHeader' class="commentHeader">
+      <div id='41CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='41CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='41CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/42.jpg"> -->
+    <img src="./images/friends/thumbnails/42.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='42LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('42','42LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='42CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('42','42CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('42CommentAlert').innerHTML='Comments Loading...'; document.getElementById('42CommentImage').src='./loader.gif'; document.getElementById('42CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('42','42LikeCount'); getCommentCount('42','42CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='42CommentBox' class='commentBox'> 
+    <div id='42CommentHeader' class="commentHeader">
+      <div id='42CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='42CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='42CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/43.jpg"> -->
+    <img src="./images/friends/thumbnails/43.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='43LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('43','43LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='43CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('43','43CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('43CommentAlert').innerHTML='Comments Loading...'; document.getElementById('43CommentImage').src='./loader.gif'; document.getElementById('43CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('43','43LikeCount'); getCommentCount('43','43CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='43CommentBox' class='commentBox'> 
+    <div id='43CommentHeader' class="commentHeader">
+      <div id='43CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='43CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='43CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/44.jpg"> -->
+    <img src="./images/friends/thumbnails/44.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='44LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('44','44LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='44CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('44','44CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('44CommentAlert').innerHTML='Comments Loading...'; document.getElementById('44CommentImage').src='./loader.gif'; document.getElementById('44CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('44','44LikeCount'); getCommentCount('44','44CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='44CommentBox' class='commentBox'> 
+    <div id='44CommentHeader' class="commentHeader">
+      <div id='44CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='44CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='44CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/45.jpg"> -->
+    <img src="./images/friends/thumbnails/45.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='45LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('45','45LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='45CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('45','45CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('45CommentAlert').innerHTML='Comments Loading...'; document.getElementById('45CommentImage').src='./loader.gif'; document.getElementById('45CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('45','45LikeCount'); getCommentCount('45','45CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='45CommentBox' class='commentBox'> 
+    <div id='45CommentHeader' class="commentHeader">
+      <div id='45CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='45CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='45CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/46.jpg"> -->
+    <img src="./images/friends/thumbnails/46.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='46LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('46','46LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='46CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('46','46CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('46CommentAlert').innerHTML='Comments Loading...'; document.getElementById('46CommentImage').src='./loader.gif'; document.getElementById('46CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('46','46LikeCount'); getCommentCount('46','46CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='46CommentBox' class='commentBox'> 
+    <div id='46CommentHeader' class="commentHeader">
+      <div id='46CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='46CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='46CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/47.jpg"> -->
+    <img src="./images/friends/thumbnails/47.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='47LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('47','47LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='47CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('47','47CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('47CommentAlert').innerHTML='Comments Loading...'; document.getElementById('47CommentImage').src='./loader.gif'; document.getElementById('47CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('47','47LikeCount'); getCommentCount('47','47CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='47CommentBox' class='commentBox'> 
+    <div id='47CommentHeader' class="commentHeader">
+      <div id='47CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='47CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='47CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/49.jpg"> -->
+    <img src="./images/friends/thumbnails/49.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='49LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('49','49LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='49CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('49','49CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('49CommentAlert').innerHTML='Comments Loading...'; document.getElementById('49CommentImage').src='./loader.gif'; document.getElementById('49CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('49','49LikeCount'); getCommentCount('49','49CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='49CommentBox' class='commentBox'> 
+    <div id='49CommentHeader' class="commentHeader">
+      <div id='49CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='49CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='49CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/50.jpg"> -->
+    <img src="./images/friends/thumbnails/50.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='50LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('50','50LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='50CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('50','50CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('50CommentAlert').innerHTML='Comments Loading...'; document.getElementById('50CommentImage').src='./loader.gif'; document.getElementById('50CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('50','50LikeCount'); getCommentCount('50','50CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='50CommentBox' class='commentBox'> 
+    <div id='50CommentHeader' class="commentHeader">
+      <div id='50CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='50CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='50CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/51.jpg"> -->
+    <img src="./images/friends/thumbnails/51.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='51LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('51','51LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='51CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('51','51CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('51CommentAlert').innerHTML='Comments Loading...'; document.getElementById('51CommentImage').src='./loader.gif'; document.getElementById('51CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('51','51LikeCount'); getCommentCount('51','51CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='51CommentBox' class='commentBox'> 
+    <div id='51CommentHeader' class="commentHeader">
+      <div id='51CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='51CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='51CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/52.jpg"> -->
+    <img src="./images/friends/thumbnails/52.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='52LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('52','52LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='52CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('52','52CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('52CommentAlert').innerHTML='Comments Loading...'; document.getElementById('52CommentImage').src='./loader.gif'; document.getElementById('52CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('52','52LikeCount'); getCommentCount('52','52CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='52CommentBox' class='commentBox'> 
+    <div id='52CommentHeader' class="commentHeader">
+      <div id='52CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='52CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='52CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/53.jpg"> -->
+    <img src="./images/friends/thumbnails/53.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='53LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('53','53LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='53CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('53','53CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('53CommentAlert').innerHTML='Comments Loading...'; document.getElementById('53CommentImage').src='./loader.gif'; document.getElementById('53CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('53','53LikeCount'); getCommentCount('53','53CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='53CommentBox' class='commentBox'> 
+    <div id='53CommentHeader' class="commentHeader">
+      <div id='53CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='53CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='53CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/54.jpg"> -->
+    <img src="./images/friends/thumbnails/54.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='54LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('54','54LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='54CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('54','54CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('54CommentAlert').innerHTML='Comments Loading...'; document.getElementById('54CommentImage').src='./loader.gif'; document.getElementById('54CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('54','54LikeCount'); getCommentCount('54','54CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='54CommentBox' class='commentBox'> 
+    <div id='54CommentHeader' class="commentHeader">
+      <div id='54CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='54CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='54CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/55.jpg"> -->
+    <img src="./images/friends/thumbnails/55.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='55LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('55','55LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='55CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('55','55CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('55CommentAlert').innerHTML='Comments Loading...'; document.getElementById('55CommentImage').src='./loader.gif'; document.getElementById('55CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('55','55LikeCount'); getCommentCount('55','55CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='55CommentBox' class='commentBox'> 
+    <div id='55CommentHeader' class="commentHeader">
+      <div id='55CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='55CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='55CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/56.jpg"> -->
+    <img src="./images/friends/thumbnails/56.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='56LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('56','56LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='56CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('56','56CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('56CommentAlert').innerHTML='Comments Loading...'; document.getElementById('56CommentImage').src='./loader.gif'; document.getElementById('56CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('56','56LikeCount'); getCommentCount('56','56CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='56CommentBox' class='commentBox'> 
+    <div id='56CommentHeader' class="commentHeader">
+      <div id='56CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='56CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='56CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/57.jpg"> -->
+    <img src="./images/friends/thumbnails/57.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='57LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('57','57LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='57CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('57','57CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('57CommentAlert').innerHTML='Comments Loading...'; document.getElementById('57CommentImage').src='./loader.gif'; document.getElementById('57CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('57','57LikeCount'); getCommentCount('57','57CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='57CommentBox' class='commentBox'> 
+    <div id='57CommentHeader' class="commentHeader">
+      <div id='57CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='57CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='57CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/58.jpg"> -->
+    <img src="./images/friends/thumbnails/58.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='58LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('58','58LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='58CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('58','58CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('58CommentAlert').innerHTML='Comments Loading...'; document.getElementById('58CommentImage').src='./loader.gif'; document.getElementById('58CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('58','58LikeCount'); getCommentCount('58','58CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='58CommentBox' class='commentBox'> 
+    <div id='58CommentHeader' class="commentHeader">
+      <div id='58CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='58CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='58CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/59.jpg"> -->
+    <img src="./images/friends/thumbnails/59.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='59LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('59','59LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='59CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('59','59CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('59CommentAlert').innerHTML='Comments Loading...'; document.getElementById('59CommentImage').src='./loader.gif'; document.getElementById('59CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('59','59LikeCount'); getCommentCount('59','59CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='59CommentBox' class='commentBox'> 
+    <div id='59CommentHeader' class="commentHeader">
+      <div id='59CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='59CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='59CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/60.jpg"> -->
+    <img src="./images/friends/thumbnails/60.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='60LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('60','60LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='60CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('60','60CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('60CommentAlert').innerHTML='Comments Loading...'; document.getElementById('60CommentImage').src='./loader.gif'; document.getElementById('60CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('60','60LikeCount'); getCommentCount('60','60CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='60CommentBox' class='commentBox'> 
+    <div id='60CommentHeader' class="commentHeader">
+      <div id='60CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='60CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='60CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/61.jpg"> -->
+    <img src="./images/friends/thumbnails/61.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='61LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('61','61LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='61CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('61','61CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('61CommentAlert').innerHTML='Comments Loading...'; document.getElementById('61CommentImage').src='./loader.gif'; document.getElementById('61CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('61','61LikeCount'); getCommentCount('61','61CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='61CommentBox' class='commentBox'> 
+    <div id='61CommentHeader' class="commentHeader">
+      <div id='61CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='61CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='61CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/62.jpg"> -->
+    <img src="./images/friends/thumbnails/62.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='62LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('62','62LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='62CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('62','62CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('62CommentAlert').innerHTML='Comments Loading...'; document.getElementById('62CommentImage').src='./loader.gif'; document.getElementById('62CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('62','62LikeCount'); getCommentCount('62','62CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='62CommentBox' class='commentBox'> 
+    <div id='62CommentHeader' class="commentHeader">
+      <div id='62CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='62CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='62CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/63.jpg"> -->
+    <img src="./images/friends/thumbnails/63.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='63LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('63','63LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='63CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('63','63CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('63CommentAlert').innerHTML='Comments Loading...'; document.getElementById('63CommentImage').src='./loader.gif'; document.getElementById('63CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('63','63LikeCount'); getCommentCount('63','63CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='63CommentBox' class='commentBox'> 
+    <div id='63CommentHeader' class="commentHeader">
+      <div id='63CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='63CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='63CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/64.jpg"> -->
+    <img src="./images/friends/thumbnails/64.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='64LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('64','64LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='64CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('64','64CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('64CommentAlert').innerHTML='Comments Loading...'; document.getElementById('64CommentImage').src='./loader.gif'; document.getElementById('64CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('64','64LikeCount'); getCommentCount('64','64CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='64CommentBox' class='commentBox'> 
+    <div id='64CommentHeader' class="commentHeader">
+      <div id='64CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='64CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='64CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+<!--IMAGE STARTS HERE-->
+<div class="container">
+
+ <!-- <a href="./images/friends/65.jpg"> -->
+    <img src="./images/friends/thumbnails/65.jpg" style="width:100%">
+  <!-- </a> -->
+
+  <div class="overlay">
+    <div class="overlayText" style="opacity: 0;">
+
+      <div class='likeCommentCounter' id='65LikeCount'>...</div>
+
+      <img class=thumbsUpImage src="./thumb.png" onclick="updateLikes('65','65LikeCount');"  > 
+
+      <div class='likeCommentCounter' id='65CommentCount'>...</div>
+
+      <img class=commentImage src="./comment.png" onclick=" getCommentContents('65','65CommentLoader'); this.parentElement.parentElement.nextElementSibling.style.height='46px'; document.getElementById('65CommentAlert').innerHTML='Comments Loading...'; document.getElementById('65CommentImage').src='./loader.gif'; document.getElementById('65CommentHeader').style.height='30px';"  > 
+    </div>
+    <btn class ="arrow" onclick="getLikes('65','65LikeCount'); getCommentCount('65','65CommentCount'); this.parentElement.style.backgroundColor = '#262626'; this.previousElementSibling.style.opacity=1; this.style.opacity=0; this.nextElementSibling.style.opacity=1;">
+      <img src="./arrow.png" style="width:18px; height:19px; margin-left: 8px; margin-top:3px; float:left; opacity: .8;" align="middle" > 
+    </btn>
+    <btn class="square" onclick="this.parentElement.style.backgroundColor = 'transparent'; this.previousElementSibling.previousElementSibling.style.opacity=0; this.previousElementSibling.style.opacity=.85; this.style.opacity=0;" ><img src="./box.png" style="width:16px; height:17px; margin-right: 8px; float: right; margin-top:4px; opacity: .99" align="middle" >
+    </btn>   
+  </div>
+
+  <div id='65CommentBox' class='commentBox'> 
+    <div id='65CommentHeader' class="commentHeader">
+      <div id='65CommentAlert' class='commentHeaderAlert' >Comments Loading...</div>
+      <img id='65CommentImage' class='commentHeaderImage' src="./loader.gif" onclick="this.parentElement.parentElement.style.height='0px';"  > 
+    </div>
+    <div id='65CommentLoader'>
+    </div>
+  </div>
+</div>
+<!--IMAGE ENDS HERE-->
+
+
+
+    </div><!--END HALF-RIGHT-->
+
+  </div>
+
+</div>
+  
+<!-- End Page Content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-row  w3-light-grey" style="height: 80px; vertical-align: center; position: absolute; margin-top: 115px; width: 100%;" >
+<br>
+  <div class="footerText" style= "font-size:80%; margin-top:-10px;">©2017 Jason Ou. All rights reserved. </div>
+  <a style="display: block;font-size:80%; margin-bottom: 4px;" class="footerText" href="mailto:jason@jasonandfriends.com?Subject=jasonandfriends" target="_top">jason@jasonandfriends.net</a>
+  <i style="float: left; left: 47%; position: relative; margin-right: 5px;" onclick="location.href='https://www.facebook.com/angrystapler?ref=bookmarks'" class="fa fa-facebook-official w3-opacity"></i>
+  <i style="float: left; left: 47%; position: relative;" onclick="location.href='https://www.linkedin.com/in/oujason/'" class="fa fa-linkedin w3-opacity"></i>
+</footer>
+
+</body>
+</html>
+
+
+
+<script>
+
+   var applicationId = 'sq0idp-J4wlWYYQ45V8u0bvIKJjZA'; // <-- Add your application's ID here
+
+    // You can delete this 'if' statement. It's here to notify you that you need
+    // to provide your application ID.
+    if (applicationId == '') {
+      alert('You need to provide a value for the applicationId variable.');
+    }
+
+    // Initializes the payment form. See the documentation for descriptions of
+    // each of these parameters.
+    var paymentForm = new SqPaymentForm({
+      applicationId: applicationId,
+      inputClass: 'sq-input',
+      inputStyles: [
+        {
+          fontSize: '15px'
+        }
+      ],
+      cardNumber: {
+        elementId: 'sq-card-number',
+        placeholder: '•••• •••• •••• ••••'
+      },
+      cvv: {
+        elementId: 'sq-cvv',
+        placeholder: 'CVV'
+      },
+      expirationDate: {
+        elementId: 'sq-expiration-date',
+        placeholder: 'MM/YY'
+      },
+      postalCode: {
+        elementId: 'sq-postal-code'
+      },
+      callbacks: {
+
+        // Called when the SqPaymentForm completes a request to generate a card
+        // nonce, even if the request failed because of an error.
+        cardNonceResponseReceived: function(errors, nonce, cardData) {
+          if (errors) {
+            var errorString="";
+            console.log("Encountered errors:");
+
+            // This logs all errors encountered during nonce generation to the
+            // Javascript console.
+            errors.forEach(function(error) {
+              console.log('  ' + error.message);
+              errorString=errorString+error.message+"\n";
+            });
+
+            alert(errorString);
+
+          // No errors occurred. Extract the card nonce.
+          } else {
+            document.getElementById('card-nonce').value = nonce;
+            checkOutConfirmation(nonce, cardData);
+
+          }
+        },
+
+        unsupportedBrowserDetected: function() {
+          // Fill in this callback to alert buyers when their browser is not supported.
+        },
+
+        // Fill in these cases to respond to various events that can occur while a
+        // buyer is using the payment form.
+        inputEventReceived: function(inputEvent) {
+          switch (inputEvent.eventType) {
+            case 'focusClassAdded':
+              // Handle as desired
+              break;
+            case 'focusClassRemoved':
+              // Handle as desired
+              break;
+            case 'errorClassAdded':
+              // Handle as desired
+              break;
+            case 'errorClassRemoved':
+              // Handle as desired
+              break;
+            case 'cardBrandChanged':
+              // Handle as desired
+              break;
+            case 'postalCodeChanged':
+              // Handle as desired
+              break;
+          }
+        },
+
+        paymentFormLoaded: function() {
+          // Fill in this callback to perform actions after the payment form is
+          // done loading (such as setting the postal code field programmatically).
+          // paymentForm.setPostalCode('94103');
+        }
+      }
+    });
+
+    // This function is called when a buyer clicks the Submit button on the webpage
+    // to charge their card.
+    function requestCardNonce(event) {
+
+      // This prevents the Submit button from submitting its associated form.
+      // Instead, clicking the Submit button should tell the SqPaymentForm to generate
+      // a card nonce, which the next line does.
+      event.preventDefault();
+
+      paymentForm.requestCardNonce();
+    } 
+</script>
